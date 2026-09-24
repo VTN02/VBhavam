@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Package, Layers, MapPin } from "lucide-react";
+import { Home, Utensils, Layers, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { WhatsAppIcon } from "@/components/icons/BrandIcons";
@@ -15,9 +15,9 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { to: "/", label: "Home", icon: Home },
-  { to: "/products", label: "Products", icon: Package },
+  { to: "/products", label: "Food Menu", icon: Utensils },
   { to: "/categories", label: "Categories", icon: Layers },
-  { to: "/branches", label: "Branches", icon: MapPin },
+  { to: "/branches", label: "Visit Us", icon: MapPin },
   {
     href: whatsappLink(waMessages.general()),
     label: "WhatsApp",
@@ -85,14 +85,14 @@ export function MobileBottomNav() {
                 aria-label={item.label}
                 className={cn(
                   "relative flex w-full flex-col items-center justify-center py-1 min-h-[48px] touch-manipulation transition-colors",
-                  isActive ? "text-blue-400" : "text-slate-400 hover:text-slate-200",
+                  isActive ? "text-amber-400" : "text-slate-400 hover:text-slate-200",
                 )}
               >
                 {/* Active Sliding Spring Indicator Pill */}
                 {isActive && (
                   <motion.span
                     layoutId="mobileActiveNavPill"
-                    className="absolute top-0 h-1 w-6 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.9)]"
+                    className="absolute top-0 h-1 w-6 rounded-full bg-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.9)]"
                     transition={{ type: "spring", stiffness: 450, damping: 30 }}
                     aria-hidden="true"
                   />
@@ -101,7 +101,7 @@ export function MobileBottomNav() {
                 <span
                   className={cn(
                     "relative grid h-7 w-7 place-items-center rounded-xl transition-all duration-200",
-                    isActive ? "bg-blue-600/20 text-blue-400 shadow-inner" : "text-slate-400",
+                    isActive ? "bg-amber-500/20 text-amber-400 shadow-inner" : "text-slate-400",
                   )}
                 >
                   <IconComponent className="h-4 w-4" aria-hidden="true" />

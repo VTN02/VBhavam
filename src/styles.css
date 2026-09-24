@@ -11,8 +11,8 @@
  */
 
 @theme inline {
-  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Outfit", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Playfair Display", "Outfit", Georgia, serif;
 
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
@@ -41,14 +41,12 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --color-navy: #0f131d;
-  --color-navy-foreground: #f8fafc;
-  --color-indigo: #3b82f6;
-  --color-violet: #6366f1;
-  --color-cyan: #38bdf8;
+  --color-gold: #f59e0b;
+  --color-saffron: #ea580c;
+  --color-veg: #16a34a;
   --color-whatsapp: #25D366;
   --color-whatsapp-foreground: #ffffff;
-  --color-success: #10b981;
+  --color-success: #16a34a;
   --color-surface: var(--surface);
 
   --animate-float-slow: float-slow 7s ease-in-out infinite;
@@ -59,59 +57,57 @@
 :root {
   --radius: 0.875rem;
 
-  /* Executive Obsidian Slate Foundation */
-  --background: #0b0e14;
-  --foreground: #f8fafc;
-  --surface: #111522;
+  /* Executive Warm Obsidian Slate Foundation */
+  --background: #0d0f12;
+  --foreground: #fbfbfb;
+  --surface: #14171d;
 
-  --card: #121624;
-  --card-foreground: #f8fafc;
-  --popover: #111522;
-  --popover-foreground: #f8fafc;
+  --card: #151922;
+  --card-foreground: #fbfbfb;
+  --popover: #14171d;
+  --popover-foreground: #fbfbfb;
 
-  /* Refined Electric Sapphire Primary */
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-  --secondary: #181d2f;
-  --secondary-foreground: #e2e8f0;
-  --muted: #1e2438;
-  --muted-foreground: #94a3b8;
-  --accent: #3b82f6;
+  /* Warm Saffron & Royal Amber Primary */
+  --primary: #f59e0b;
+  --primary-foreground: #1a0f00;
+  --secondary: #212634;
+  --secondary-foreground: #f3f4f6;
+  --muted: #1c212c;
+  --muted-foreground: #9ca3af;
+  --accent: #d97706;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
 
-  --border: rgba(255, 255, 255, 0.08);
+  --border: rgba(245, 158, 11, 0.12);
   --input: rgba(255, 255, 255, 0.1);
-  --ring: #3b82f6;
+  --ring: #f59e0b;
 
-  --navy: #0f131d;
-  --navy-foreground: #f8fafc;
-  --indigo: #3b82f6;
-  --violet: #6366f1;
-  --cyan: #38bdf8;
+  --gold: #f59e0b;
+  --saffron: #ea580c;
+  --veg: #16a34a;
   --whatsapp: #25D366;
   --whatsapp-foreground: #ffffff;
-  --success: #10b981;
+  --success: #16a34a;
 
-  /* Elegant Professional Metallic & Sapphire Gradients */
-  --gradient-brand: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #3b82f6 100%);
-  --gradient-deep: linear-gradient(180deg, #0b0e14 0%, #0e121c 50%, #111522 100%);
-  --gradient-cyan: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
-  --gradient-metallic: linear-gradient(180deg, #ffffff 20%, #cbd5e1 70%, #94a3b8 100%);
-  --gradient-card: linear-gradient(180deg, rgba(20, 25, 40, 0.8) 0%, rgba(14, 18, 30, 0.9) 100%);
+  /* Warm Saffron, Turmeric & Traditional Ghee Gold Gradients */
+  --gradient-brand: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  --gradient-deep: linear-gradient(180deg, #0d0f12 0%, #12151b 50%, #171b23 100%);
+  --gradient-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  --gradient-metallic: linear-gradient(180deg, #ffffff 20%, #fef3c7 70%, #d97706 100%);
+  --gradient-card: linear-gradient(180deg, rgba(24, 28, 38, 0.85) 0%, rgba(17, 20, 28, 0.95) 100%);
 
   --shadow-soft: 0 4px 16px -2px rgba(0, 0, 0, 0.5);
-  --shadow-lift: 0 16px 36px -10px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(37, 99, 235, 0.15);
-  --shadow-glow: 0 0 35px -8px rgba(37, 99, 235, 0.4);
+  --shadow-lift: 0 16px 36px -10px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(245, 158, 11, 0.15);
+  --shadow-glow: 0 0 35px -8px rgba(245, 158, 11, 0.4);
 }
 
 .dark {
-  --background: #0b0e14;
-  --foreground: #f8fafc;
-  --surface: #111522;
-  --card: #121624;
-  --card-foreground: #f8fafc;
+  --background: #0d0f12;
+  --foreground: #fbfbfb;
+  --surface: #14171d;
+  --card: #151922;
+  --card-foreground: #fbfbfb;
 }
 
 @layer base {
@@ -133,9 +129,9 @@
   body {
     background-color: var(--background);
     background-image:
-      radial-gradient(1200px circle at 50% -10%, rgba(37, 99, 235, 0.08) 0%, transparent 60%),
-      radial-gradient(800px circle at 85% 30%, rgba(56, 189, 248, 0.04) 0%, transparent 50%),
-      radial-gradient(900px circle at 15% 70%, rgba(37, 99, 235, 0.04) 0%, transparent 50%);
+      radial-gradient(1200px circle at 50% -10%, rgba(245, 158, 11, 0.09) 0%, transparent 60%),
+      radial-gradient(800px circle at 85% 30%, rgba(234, 88, 12, 0.05) 0%, transparent 50%),
+      radial-gradient(900px circle at 15% 70%, rgba(22, 163, 74, 0.04) 0%, transparent 50%);
     background-attachment: fixed;
     color: var(--color-foreground);
     font-family: var(--font-sans);

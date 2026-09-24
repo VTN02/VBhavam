@@ -8,21 +8,21 @@ export function whatsappLink(message: string, number: string = site.whatsappNumb
 
 export const waMessages = {
   general: () =>
-    `Hi ${site.name}, I would like to know more about your products and services.`,
+    `Hi ${site.name}, I would like to inquire about today's vegetarian menu and specials.`,
   sample1_product: () =>
-    `Hi ${site.name}, I would like to check the price and stock availability for your mobile phones and accessories.`,
+    `Hi ${site.name}, I would like to check availability for breakfast/lunch items and take away packs.`,
   sample2_repair: () =>
-    `Hi ${site.name}, I would like to inquire about device repair services and get a cost estimate.`,
+    `Hi ${site.name}, I would like to inquire about bulk sweets, snacks, or catering orders in Jaffna.`,
   product: (productName: string) =>
-    `Hi, I'm interested in the ${productName}. Could you please provide more details about availability and price?`,
+    `Hi, I'm interested in ordering or checking availability for ${productName} at ${site.name}.`,
   productShort: (productName: string) =>
-    `Hi, I'm interested in the ${productName}. Is it available?`,
+    `Hi, is ${productName} available right now?`,
   repair: (serviceName?: string) =>
     serviceName
-      ? `Hi, I would like to inquire about your ${serviceName} service.`
-      : `Hi, I would like to inquire about your repair services.`,
+      ? `Hi, I would like to inquire about ${serviceName}.`
+      : `Hi, I would like to inquire about Vishnu Bhavan special meals.`,
   branch: (branchName: string) =>
-    `Hi, I would like to contact your ${branchName}. Could you please assist me?`,
+    `Hi, I would like to contact ${site.name} at ${branchName}.`,
   contactForm: (data: { name: string; phone: string; email: string; message: string }) =>
     `Hi ${site.name}, I'd like to make an inquiry.\n\nName: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email}\n\n${data.message}`,
   developer: () =>

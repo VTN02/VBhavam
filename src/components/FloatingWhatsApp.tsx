@@ -12,19 +12,19 @@ const SAMPLE_MESSAGES = [
   {
     id: "hello",
     emoji: "👋",
-    label: "Say Hi!",
-    message: "Hi! 👋",
+    label: "Say Vanakkam!",
+    message: "Vanakkam! 🙏 Vishnu Bhavan",
   },
   {
     id: "product",
-    emoji: "📱",
-    label: "Product Inquiry",
+    emoji: "🍛",
+    label: "Menu & Take Away",
     message: waMessages.sample1_product(),
   },
   {
-    id: "repair",
-    emoji: "🔧",
-    label: "Repair Quote",
+    id: "catering",
+    emoji: "🍬",
+    label: "Sweets & Bulk Orders",
     message: waMessages.sample2_repair(),
   },
 ];
@@ -196,13 +196,22 @@ export function FloatingWhatsApp() {
                 {/* Message options — plain */}
                 <div className="flex flex-col divide-y divide-white/[0.06]">
                   <a
+                    href={whatsappLink(waMessages.general())}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="px-4 py-3.5 text-[13px] text-slate-200 transition-colors hover:bg-white/[0.05] hover:text-white active:bg-white/[0.08]"
+                  >
+                    🍽️ Today's Specials &amp; Menu
+                  </a>
+                  <a
                     href={whatsappLink(waMessages.sample1_product())}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setOpen(false)}
                     className="px-4 py-3.5 text-[13px] text-slate-200 transition-colors hover:bg-white/[0.05] hover:text-white active:bg-white/[0.08]"
                   >
-                    📱 Product &amp; Price Inquiry
+                    🍛 Lunch Packs &amp; Take Away
                   </a>
                   <a
                     href={whatsappLink(waMessages.sample2_repair())}
@@ -211,7 +220,7 @@ export function FloatingWhatsApp() {
                     onClick={() => setOpen(false)}
                     className="px-4 py-3.5 text-[13px] text-slate-200 transition-colors hover:bg-white/[0.05] hover:text-white active:bg-white/[0.08]"
                   >
-                    🔧 Repair &amp; Service Quote
+                    🍬 Sweets &amp; Bulk Catering
                   </a>
                 </div>
 

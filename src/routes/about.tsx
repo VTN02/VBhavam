@@ -5,9 +5,9 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { AboutSection } from "@/components/AboutSection";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
 
-const title = `About Us — Mobiles, Electronics & Repairs | ${site.name}`;
+const title = `About Vishnu Bhavan — 100% Pure Vegetarian Restaurant, Jaffna`;
 const description =
-  "Learn about our shop: quality products, experienced repair technicians, customer-focused service and two convenient branches.";
+  "About Vishnu Bhavan: Authentic South Indian and Jaffna-style vegetarian food, breakfast items, lunch specials, evening dishes, traditional snacks, sweets and beverages.";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: description },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
+      { property: "og:type", content: "restaurant" },
       { property: "og:url", content: "/about" },
     ],
     links: [{ rel: "canonical", href: "/about" }],
@@ -26,16 +26,16 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   return (
-    <div className="flex flex-col">
-      <div className="relative overflow-hidden pt-14 pb-12 sm:pt-16 sm:pb-16 lg:pt-20 lg:pb-20 bg-section-hero">
-        <span className="glow-orb top-[-20%] left-1/2 h-96 w-96 -translate-x-1/2 bg-blue-600/20" aria-hidden="true" />
+    <div className="flex flex-col bg-[#0d0f14]">
+      <div className="relative overflow-hidden pt-14 pb-12 sm:pt-16 sm:pb-16 lg:pt-20 lg:pb-20 bg-[#0a0c10]">
+        <span className="glow-orb top-[-20%] left-1/2 h-96 w-96 -translate-x-1/2 bg-amber-600/20" aria-hidden="true" />
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs items={[{ label: "About Us" }]} />
           <SectionHeading
             as="h1"
-            eyebrow="About"
-            title={`Who we are at ${site.name}`}
-            subtitle="A neighbourhood technology shop with premium standards — products you can trust and repairs handled with care."
+            eyebrow="Pure Vegetarian Kitchen"
+            title={`About ${site.name}`}
+            subtitle="Authentic South Indian & traditional Jaffna pure vegetarian restaurant on Kankesanturai Road, Jaffna, Sri Lanka."
           />
         </div>
       </div>

@@ -18,9 +18,9 @@ import { ProductGrid } from "@/components/ProductGrid";
 import { ProductFilters, type FilterState } from "@/components/ProductFilters";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
-const title = `Products — Mobiles, CCTV, Chargers, Cables & Electronics | ${site.name}`;
+const title = `Digital Food Menu (83 Items) — ${site.name} Pure Vegetarian Restaurant`;
 const description =
-  "Browse mobile phones, CCTV security cameras, chargers, cables, repair tools, audio, and electronics. Filter by category, brand, price range and inquire instantly on WhatsApp.";
+  "Explore authentic South Indian breakfasts, traditional Jaffna rice meals, evening tiffins, sweets, and beverages at Vishnu Bhavan. 100% Pure Vegetarian Kitchen.";
 
 export type ProductSearchParams = {
   category?: string;
@@ -304,26 +304,26 @@ function ProductsPage() {
           items={
             category && category !== "All"
               ? [
-                  { label: "Products", to: "/products" },
+                  { label: "Digital Menu", to: "/products" },
                   { label: category },
                 ]
-              : [{ label: "Products" }]
+              : [{ label: "Digital Menu" }]
           }
         />
         <SectionHeading
           as="h1"
-          eyebrow="Our Store"
-          title="Explore Our Products"
-          subtitle="Discover genuine smartphones, CCTV surveillance systems, fast chargers, cables, and certified repair equipment."
+          eyebrow="100% Pure Vegetarian Kitchen"
+          title="Our Complete Food Menu"
+          subtitle="Explore authentic South Indian breakfasts, traditional Jaffna rice meals, evening tiffins, sweets, and beverages."
         />
 
         {/* TOP CONTROLS & SEARCH BAR */}
-        <div className="mt-8 rounded-2xl border border-white/[0.08] bg-[#121624] p-3 sm:p-4 shadow-md backdrop-blur-xl">
+        <div className="mt-8 rounded-2xl border border-amber-500/20 bg-[#121624] p-3 sm:p-4 shadow-md backdrop-blur-xl">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             {/* Search Input Bar */}
             <form onSubmit={handleSearchSubmit} className="relative flex-1 max-w-xl">
-              <div className="flex items-center rounded-xl border border-white/10 bg-[#0d101a] px-3 py-1.5 focus-within:border-blue-500 transition-colors">
-                <Search className="h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
+              <div className="flex items-center rounded-xl border border-white/10 bg-[#0d101a] px-3 py-1.5 focus-within:border-amber-500 transition-colors">
+                <Search className="h-4 w-4 shrink-0 text-amber-400" aria-hidden="true" />
                 <input
                   type="text"
                   value={localQuery}
@@ -333,8 +333,8 @@ function ProductsPage() {
                       updateSearch({ q: undefined });
                     }
                   }}
-                  placeholder="Search products, brands, CCTV, chargers, repair tools..."
-                  aria-label="Search product catalog"
+                  placeholder="Search dish name or item number (e.g. #050, String Hoppers, Pittu Kottu)..."
+                  aria-label="Search food menu"
                   className="w-full bg-transparent px-2.5 py-1 text-base sm:text-sm text-white placeholder-slate-400 outline-none"
                 />
                 {localQuery && (

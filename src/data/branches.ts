@@ -1,5 +1,3 @@
-/** MOCK DATA — replace placeholders with the real branch information. */
-
 export type Branch = {
   id: string;
   label: string;
@@ -7,37 +5,30 @@ export type Branch = {
   address: string;
   phone: string;
   hours: string;
-  /** Google Maps directions link shown on the button. */
   mapsUrl: string;
-  /** Google Maps embed src for the iframe preview in the card header. */
   mapsEmbedUrl: string;
   area: string;
+  highlights: string[];
 };
 
 export const branches: Branch[] = [
   {
-    id: "branch-01",
-    label: "Branch 01",
-    name: "Vasantham Mobile – Kilinochchi Main",
-    address: "A9 Road, Kilinochchi, Northern Province, Sri Lanka",
-    phone: "077 453 4056",
-    hours: "Mon – Sun: 9:00 AM – 8:00 PM",
-    mapsUrl: "https://www.google.com/maps/search/A9+Road,+Kilinochchi,+Sri+Lanka",
+    id: "branch-jaffna",
+    label: "Main Restaurant",
+    name: "Vishnu Bhavan — Jaffna",
+    address: "No. 350, Jaffna–Kankesanturai Road, Jaffna, Sri Lanka",
+    phone: "Official hotline to be added",
+    hours: "6:00 AM – 10:00 PM • 7 Days a Week",
+    mapsUrl:
+      "https://www.google.com/maps/search/?api=1&query=Vishnu%20Bhavan%2C%20No.%20350%2C%20Jaffna-Kankesanturai%20Road%2C%20Jaffna%2C%20Sri%20Lanka",
     mapsEmbedUrl:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3937.123456789!2d80.3982!3d9.3985!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afe4b8d0c0001%3A0x0!2sKilinochchi!5e0!3m2!1sen!2slk!4v1234567890",
-    area: "Kilinochchi",
-  },
-  {
-    id: "branch-02",
-    label: "Branch 02",
-    name: "Vasantham Mobile – Kilinochchi Town",
-    address: "Main Street, Kilinochchi, Northern Province, Sri Lanka",
-    phone: "077 453 4056",
-    hours: "Mon – Sun: 9:00 AM – 8:00 PM",
-    mapsUrl: "https://www.google.com/maps/search/Main+Street,+Kilinochchi,+Sri+Lanka",
-    mapsEmbedUrl:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3937.234567891!2d80.4012!3d9.3950!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afe4b9234560001%3A0x0!2sKilinochchi+Town!5e0!3m2!1sen!2slk!4v1234567891",
-    area: "Kilinochchi",
+      "https://maps.google.com/maps?q=Vishnu%20Bhavan%2C%20No.%20350%2C%20Jaffna-Kankesanturai%20Road%2C%20Jaffna&t=&z=15&ie=UTF8&iwloc=&output=embed",
+    area: "Jaffna–Kankesanturai (KKS) Road",
+    highlights: [
+      "100% Pure Vegetarian Kitchen",
+      "Breakfast, Lunch & Evening Special Dining",
+      "Dine-in, Takeaway & Heritage Savouries",
+      "Centrally located on KKS Road with convenient access",
+    ],
   },
 ];
-

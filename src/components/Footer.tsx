@@ -1,190 +1,160 @@
 import { Link } from "@tanstack/react-router";
-import { Mail, MapPin, Phone, Smartphone } from "lucide-react";
+import { Clock, MapPin, Sparkles, Utensils, Navigation } from "lucide-react";
 import { site } from "@/config/site";
-import { branches } from "@/data/branches";
 import { categories } from "@/data/products";
-import { waMessages, whatsappLink } from "@/utils/whatsapp";
-import {
-  FacebookIcon,
-  InstagramIcon,
-  WhatsAppIcon,
-  YouTubeIcon,
-} from "@/components/icons/BrandIcons";
-import { cn } from "@/lib/utils";
+import { GoogleMapsIcon } from "@/components/icons/BrandIcons";
 
-const businessLinks = [
-  { to: "/categories", label: "Categories" },
-  { to: "/products", label: "Products" },
-  { to: "/branches", label: "Branches" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+const menuLinks = categories.map((cat) => ({
+  label: cat,
+  to: `/products?category=${encodeURIComponent(cat)}`,
+}));
+
+const quickLinks = [
+  { to: "/", label: "Home" },
+  { to: "/products", label: "Complete Digital Menu (83 Items)" },
+  { to: "/categories", label: "Menu Categories" },
+  { to: "/about", label: "About Vishnu Bhavan" },
+  { to: "/contact", label: "Location & Directions" },
 ] as const;
 
 export function Footer() {
   return (
     <>
       <div className="divider-glow" aria-hidden="true" />
-      <footer className="relative overflow-hidden bg-gradient-deep text-navy-foreground">
-        <span className="glow-orb top-[-40%] left-1/4 h-80 w-80 bg-primary/40" aria-hidden="true" />
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-blue-600 via-indigo-600 to-sky-400 text-white shadow-lg shadow-blue-600/30 ring-1 ring-white/20">
-                <Smartphone className="h-5 w-5" aria-hidden="true" />
-              </span>
-              <div className="min-w-0">
-                <span className="block truncate text-base leading-tight font-extrabold bg-gradient-to-r from-white via-slate-100 to-sky-200 bg-clip-text text-transparent">
-                  {site.name}
+      <footer className="relative overflow-hidden bg-[#0a0c10] text-slate-200">
+        <span className="glow-orb top-[-40%] left-1/4 h-80 w-80 bg-amber-600/15" aria-hidden="true" />
+        <div className="relative mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Column 1: Restaurant Brand */}
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-500 text-black shadow-lg shadow-amber-500/20 ring-1 ring-white/20">
+                  <Utensils className="h-5 w-5" aria-hidden="true" />
                 </span>
-                <span className="block text-[10.5px] leading-tight font-bold bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-300 bg-clip-text text-transparent">
-                  Mobiles &amp; Electronics
-                </span>
+                <div className="min-w-0">
+                  <span className="block truncate text-lg leading-tight font-extrabold text-white">
+                    {site.name}
+                  </span>
+                  <span className="block text-xs font-bold text-amber-400">
+                    {site.tamilName} • Pure Vegetarian
+                  </span>
+                </div>
+              </div>
+
+              <p className="mt-4 text-sm leading-relaxed text-slate-400">
+                Authentic South Indian &amp; traditional Jaffna pure vegetarian restaurant. Hot breakfasts, banana leaf lunches, evening tiffins, sweets &amp; heritage palakaaram.
+              </p>
+
+              <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-950/50 px-3 py-1 text-xs font-bold text-emerald-400">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                100% Pure Vegetarian Kitchen
               </div>
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-navy-foreground/70">
-              Mobile phones, CCTV security cameras, chargers, cables, electronics and repair tools — plus trusted
-              in-house repair services at two convenient branches.
-            </p>
-            <div className="mt-5 flex gap-2">
-              {[
-                {
-                  href: site.socials.facebook,
-                  Icon: FacebookIcon,
-                  label: "Facebook",
-                  hoverClass: "hover:border-[#1877F2]/50 hover:bg-[#1877F2]/15 hover:text-[#1877F2]",
-                },
-                {
-                  href: site.socials.instagram,
-                  Icon: InstagramIcon,
-                  label: "Instagram",
-                  hoverClass: "hover:border-rose-500/50 hover:bg-rose-500/15 hover:text-rose-400",
-                },
-              ].map(({ href, Icon, label, hoverClass }) => (
+
+            {/* Column 2: Digital Menu Categories */}
+            <nav aria-label="Menu categories">
+              <h2 className="text-xs font-bold tracking-[0.14em] text-amber-400 uppercase">
+                Digital Menu
+              </h2>
+              <ul className="mt-4 space-y-2.5 text-sm">
+                {menuLinks.map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      to={item.to}
+                      className="text-slate-400 transition-colors hover:text-amber-300"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            {/* Column 3: Quick Links & Hours */}
+            <div>
+              <h2 className="text-xs font-bold tracking-[0.14em] text-amber-400 uppercase">
+                Serving Timings
+              </h2>
+              <ul className="mt-4 space-y-3 text-xs text-slate-300">
+                <li className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
+                  <span className="block font-bold text-white">Breakfast &amp; All Time</span>
+                  <span className="text-amber-300/90 font-mono">6:00 AM – 10:00 PM</span>
+                  <span className="block text-[11px] text-slate-400 mt-0.5">String hoppers, idly, dosai &amp; vadai</span>
+                </li>
+                <li className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
+                  <span className="block font-bold text-white">Lunch Service</span>
+                  <span className="text-amber-300/90 font-mono">11:00 AM – 3:00 PM</span>
+                  <span className="block text-[11px] text-slate-400 mt-0.5">Rice &amp; curry, Jaffna special, budget pack</span>
+                </li>
+                <li className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
+                  <span className="block font-bold text-white">Evening Special</span>
+                  <span className="text-amber-300/90 font-mono">4:00 PM – 10:00 PM</span>
+                  <span className="block text-[11px] text-slate-400 mt-0.5">Ghee dosai, pittu kottu, rotti kottu</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 4: Location & Inquiries */}
+            <div>
+              <h2 className="text-xs font-bold tracking-[0.14em] text-amber-400 uppercase">
+                Visit Restaurant
+              </h2>
+              <ul className="mt-4 space-y-3.5 text-sm">
+                <li className="flex items-start gap-2.5">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden="true" />
+                  <span className="text-slate-300 text-xs leading-relaxed">
+                    {site.address}
+                  </span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden="true" />
+                  <span className="text-slate-300 text-xs">
+                    {site.hours}
+                  </span>
+                </li>
+                <li className="flex items-start gap-2.5 text-xs text-slate-400">
+                  <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden="true" />
+                  <span>
+                    Dine-In &amp; Takeaway: Walk-in orders warmly welcomed at our main counter at No. 350 KKS Road.
+                  </span>
+                </li>
+              </ul>
+
+              <div className="mt-5">
                 <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className={cn(
-                    "grid h-10 w-10 place-items-center rounded-xl border border-navy-foreground/15 bg-navy-foreground/10 text-navy-foreground/80 transition-colors",
-                    hoverClass,
-                  )}
+                  href={site.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs font-bold text-amber-300 hover:bg-amber-500 hover:text-black transition-all"
                 >
-                  <Icon size={18} colored={false} aria-hidden="true" />
+                  <Navigation className="h-3.5 w-3.5" />
+                  <span>Get Directions on Google Maps</span>
                 </a>
-              ))}
+              </div>
             </div>
           </div>
 
-          <nav aria-label="Business">
-            <h2 className="text-sm font-bold tracking-[0.14em] text-cyan uppercase">Business</h2>
-            <ul className="mt-4 space-y-2.5 text-sm">
-              {businessLinks.map((link) => (
-                <li key={link.to}>
-                  <Link
-                    to={link.to}
-                    className="text-navy-foreground/70 transition-colors hover:text-navy-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <nav aria-label="Product categories">
-            <h2 className="text-sm font-bold tracking-[0.14em] text-cyan uppercase">Products</h2>
-            <ul className="mt-4 space-y-2.5 text-sm">
-              {categories.map((category) => (
-                <li key={category}>
-                  <Link
-                    to="/products"
-                    search={{ category }}
-                    className="text-navy-foreground/70 transition-colors hover:text-navy-foreground"
-                  >
-                    {category}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div>
-            <h2 className="text-sm font-bold tracking-[0.14em] text-cyan uppercase">Contact</h2>
-            <ul className="mt-4 space-y-3 text-sm text-navy-foreground/70">
-              <li className="flex items-start gap-2.5">
-                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-cyan" aria-hidden="true" />
-                <span className="min-w-0 break-words">{site.phone}</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <WhatsAppIcon size={16} colored={true} className="mt-0.5 shrink-0" />
-                <a
-                  href={whatsappLink(waMessages.general())}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-w-0 break-words transition-colors hover:text-white hover:underline decoration-emerald-400/50"
-                >
-                  WhatsApp: {site.whatsappNumber}
-                </a>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-cyan" aria-hidden="true" />
-                <span className="min-w-0 break-words">{site.email}</span>
-              </li>
-              {branches.map((branch) => (
-                <li key={branch.id} className="flex items-start gap-2.5">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-cyan" aria-hidden="true" />
-                  <span className="min-w-0 break-words">
-                    {branch.label}: {branch.address}
-                  </span>
-                </li>
-              ))}
-            </ul>
+          {/* Bottom Bar */}
+          <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/[0.08] pt-8 text-xs text-slate-500 sm:flex-row">
+            <p>
+              © {new Date().getFullYear()} {site.name} • {site.tamilName}. All rights reserved. 100% Pure Vegetarian Kitchen, Jaffna, Sri Lanka.
+            </p>
+            <div className="flex items-center gap-4">
+              <Link to="/about" className="hover:text-slate-300 transition-colors">
+                About Us
+              </Link>
+              <span>•</span>
+              <Link to="/products" className="hover:text-slate-300 transition-colors">
+                Digital Menu
+              </Link>
+              <span>•</span>
+              <Link to="/contact" className="hover:text-slate-300 transition-colors">
+                Visit &amp; Directions
+              </Link>
+            </div>
           </div>
         </div>
-
-        <div className="mt-12 flex flex-col gap-3 border-t border-navy-foreground/12 pt-6 text-xs text-navy-foreground/60 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} {site.name}. All rights reserved.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <span className="cursor-default transition-colors hover:text-navy-foreground">
-              Privacy Policy
-            </span>
-            <span className="cursor-default transition-colors hover:text-navy-foreground">
-              Terms &amp; Conditions
-            </span>
-          </div>
-        </div>
-
-        {/* ── Developer Credit Strip ── */}
-        <div className="mt-5 flex items-center justify-center border-t border-white/[0.05] pt-5">
-          <p className="flex items-center gap-1.5 text-[11px] text-navy-foreground/35">
-            <span>Designed &amp; developed with</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-3 w-3 text-rose-500/70"
-              aria-hidden="true"
-            >
-              <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-            </svg>
-            <span>by</span>
-            <a
-              href={whatsappLink(waMessages.developer(), "94774534056")}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Contact Vithusan V on WhatsApp"
-              className="font-bold text-[#25D366]/60 transition-colors duration-200 hover:text-[#25D366]"
-            >
-              Vithusan V
-            </a>
-          </p>
-        </div>
-      </div>
-    </footer>
+      </footer>
     </>
   );
 }
-

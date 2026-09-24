@@ -4,6 +4,10 @@ import { ArrowRight, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 
+import heroFeast from "@/assets/hero-feast.jpg";
+import lunchFeast from "@/assets/lunch-feast.jpg";
+import eveningSpecial from "@/assets/evening-special.jpg";
+
 // ─── Slide Data ────────────────────────────────────────────────────────────────
 interface HeroSlide {
   id: number;
@@ -12,7 +16,7 @@ interface HeroSlide {
   headingAccent: string;
   subheading: string;
   primaryCta: { label: string; href?: string; to?: string };
-  secondaryCta: { label: string; to: string };
+  secondaryCta: { label: string; to: string; href?: string };
   bg: { type: "video" | "image"; src: string };
   accentColor: string;
   accentGlow: string;
@@ -21,48 +25,48 @@ interface HeroSlide {
 const SLIDES: HeroSlide[] = [
   {
     id: 0,
-    eyebrow: "New Arrivals",
-    heading: "Latest Technology.",
-    headingAccent: "Better Experience.",
+    eyebrow: "100% Pure Vegetarian Kitchen • Jaffna",
+    heading: "Authentic South Indian &",
+    headingAccent: "Jaffna Heritage Cuisine",
     subheading:
-      "Discover the latest smartphones, electronics and smart devices — all in one place.",
-    primaryCta: { label: "Shop Products", to: "/products" },
-    secondaryCta: { label: "Explore", to: "/categories" },
-    bg: { type: "video", src: "/accessories-video.mp4" },
-    accentColor: "from-blue-400 via-sky-300 to-indigo-300",
-    accentGlow: "bg-blue-600/25",
+      "Welcome to Vishnu Bhavan on Kankesanturai Road. Savor steaming string hoppers, crispy golden dosai, traditional banana leaf rice & curry, evening kottu, and handcrafted pure ghee sweets.",
+    primaryCta: { label: "Browse Digital Menu (83 Items)", to: "/products" },
+    secondaryCta: { label: "Serving Schedule", to: "/#schedule" },
+    bg: { type: "image", src: heroFeast },
+    accentColor: "from-amber-400 via-yellow-300 to-orange-400",
+    accentGlow: "bg-amber-600/30",
   },
   {
     id: 1,
-    eyebrow: "Certified Technicians",
-    heading: "Expert Repair.",
-    headingAccent: "Trusted Service.",
+    eyebrow: "Midday Specials • 11:00 AM – 3:00 PM",
+    heading: "Traditional Vegetarian",
+    headingAccent: "Rice & Curry Feast",
     subheading:
-      "Professional mobile and electronic repair services you can rely on — same-day turnaround.",
+      "Signature Jaffna Special Lunch served with country rice, aromatic curries, rasam, curd, and papadam, plus convenient budget take-away packs.",
     primaryCta: {
-      label: "Book a Repair",
-      href: "/products?category=Repair+Tools+%26+Parts",
+      label: "Explore Lunch Menu",
+      href: "/products?category=Lunch",
     },
-    secondaryCta: { label: "Learn More", to: "/about" },
-    bg: { type: "video", src: "/about-video.mp4" },
-    accentColor: "from-emerald-400 via-teal-300 to-cyan-300",
-    accentGlow: "bg-emerald-600/20",
+    secondaryCta: { label: "Find Restaurant", to: "/contact" },
+    bg: { type: "image", src: lunchFeast },
+    accentColor: "from-emerald-400 via-teal-300 to-amber-300",
+    accentGlow: "bg-emerald-600/25",
   },
   {
     id: 2,
-    eyebrow: "Premium Accessories",
-    heading: "Complete",
-    headingAccent: "Your Setup.",
+    eyebrow: "Fresh Evening Tiffin • 4:00 PM – 10:00 PM",
+    heading: "Crispy Ghee Dosai &",
+    headingAccent: "Sizzling Pittu Kottu",
     subheading:
-      "Premium cases, chargers, earbuds, cables and accessories for every device.",
+      "Golden masala dosais, pure cow ghee roast, sizzling Pittu Kottu chopped on the griddle with fresh vegetables, and wholesome Jaffna palakaaram.",
     primaryCta: {
-      label: "Shop Accessories",
-      href: "/products?category=Accessories",
+      label: "View Evening Specials",
+      href: "/products?category=Evening+Special",
     },
-    secondaryCta: { label: "Explore", to: "/categories" },
-    bg: { type: "video" as const, src: "/hero-video.mp4" },
-    accentColor: "from-violet-400 via-purple-300 to-fuchsia-300",
-    accentGlow: "bg-violet-600/20",
+    secondaryCta: { label: "Jaffna Palakaaram", to: "/products" },
+    bg: { type: "image", src: eveningSpecial },
+    accentColor: "from-orange-400 via-amber-300 to-yellow-300",
+    accentGlow: "bg-orange-600/25",
   },
 ];
 
@@ -99,40 +103,40 @@ const bgVariants = {
 // ─── Offer Ticker Data & Component ──────────────────────────────────────────
 const HERO_OFFERS = [
   {
-    tag: "🔥 SPECIAL DEAL",
-    text: "Up to 20% OFF on 4K CCTV Security Cameras & DVR Kits",
-    link: "/products?category=CCTV+%26+Cameras",
-    badgeColor: "bg-rose-500/15 text-rose-300 border-rose-500/30",
-  },
-  {
-    tag: "⚡ 30-MIN REPAIR",
-    text: "Same-Day Screen & Battery Replacement with In-House Warranty",
-    link: "/products?category=Repair+Tools+%26+Parts",
-    badgeColor: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-  },
-  {
-    tag: "🎁 FREE GIFT",
-    text: "Free 100W Braided Fast Cable with every GaN Charger",
-    link: "/products?category=Chargers+%26+Cables",
+    tag: "🌱 100% PURE VEG",
+    text: "Pure Vegetarian Kitchen • Dedicated Sattvic Preparation",
+    link: "/about",
     badgeColor: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
   },
   {
-    tag: "🛡️ FREE GLASS",
-    text: "Free 9H Tempered Glass with all Flagship Smartphone Purchases",
-    link: "/products?category=Mobile+Phones",
-    badgeColor: "bg-blue-500/15 text-blue-300 border-blue-500/30",
+    tag: "⏰ OPERATING HOURS",
+    text: "6:00 AM – 10:00 PM • Serving Breakfast, Lunch & Dinner 7 Days a Week",
+    link: "/#schedule",
+    badgeColor: "bg-amber-500/15 text-amber-300 border-amber-500/30",
   },
   {
-    tag: "🚚 FAST DELIVERY",
-    text: "Island-Wide Fast Delivery • Hotline / WhatsApp: 077 453 4056",
+    tag: "📍 JAFFNA LOCATION",
+    text: "No. 350, Jaffna–Kankesanturai (KKS) Road, Jaffna, Sri Lanka",
     link: "/contact",
-    badgeColor: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
+    badgeColor: "bg-sky-500/15 text-sky-300 border-sky-500/30",
   },
   {
-    tag: "💎 ACCESSORIES",
-    text: "Up to 15% OFF on Spigen Armor Cases & MagSafe Docks",
-    link: "/products?category=Accessories",
-    badgeColor: "bg-purple-500/15 text-purple-300 border-purple-500/30",
+    tag: "🍛 MIDDAY LUNCH",
+    text: "Rice & Curry (Rs.150) • Budget Lunch Pack (Rs.130) • 11 AM - 3 PM",
+    link: "/products?category=Lunch",
+    badgeColor: "bg-orange-500/15 text-orange-300 border-orange-500/30",
+  },
+  {
+    tag: "🌾 DIABETES SPECIAL",
+    text: "Kurakkan String Hoppers, Kurakkan Dosai & Attama Rotti Varieties",
+    link: "/products?category=Diabetes+Special",
+    badgeColor: "bg-teal-500/15 text-teal-300 border-teal-500/30",
+  },
+  {
+    tag: "🍮 JAFFNA HERITAGE",
+    text: "Kolukattai, Mothakam, Seeni Ariyatharam & Odyal Kool (Rs.100)",
+    link: "/products?category=Jaffna+Palakaaram",
+    badgeColor: "bg-yellow-500/15 text-yellow-300 border-yellow-500/30",
   },
 ];
 
@@ -458,7 +462,7 @@ export function Hero() {
           </motion.h1>
         </AnimatePresence>
 
-        {/* Subheading */}
+        {/* Subheading (Hidden on mobile screen for cleaner mobile viewport) */}
         <AnimatePresence mode="wait">
           <motion.p
             key={`sub-${slide.id}`}
@@ -467,7 +471,7 @@ export function Hero() {
             animate="visible"
             exit="exit"
             transition={{ delay: 0.2 }}
-            className="mt-4 sm:mt-5 max-w-xl text-sm sm:text-lg leading-relaxed text-white/70 font-light"
+            className="mt-4 sm:mt-5 max-w-xl text-sm sm:text-lg leading-relaxed text-white/70 font-light hidden sm:block"
           >
             {slide.subheading}
           </motion.p>

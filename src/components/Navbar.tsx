@@ -3,93 +3,86 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Menu,
   X,
-  Smartphone,
   Search,
   ChevronDown,
-  Camera,
-  Zap,
-  Wrench,
-  Cpu,
+  Utensils,
+  Coffee,
+  Flame,
   ShieldCheck,
-  Headphones,
-  Watch,
+  Sparkles,
+  Heart,
+  CupSoda,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Clock,
+  MapPin,
+  Navigation,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { site } from "@/config/site";
 import { categories, products, formatPrice, type Category, type Product } from "@/data/products";
 import { SearchModal } from "@/components/SearchModal";
-import { WhatsAppIcon } from "@/components/icons/BrandIcons";
-import { waMessages, whatsappLink } from "@/utils/whatsapp";
 import { setSearchActive } from "@/utils/searchEvents";
 
 const links = [
   { to: "/", label: "Home" },
   { to: "/categories", label: "Categories", hasDropdown: true },
-  { to: "/products", label: "Products" },
-  { to: "/branches", label: "Branches" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { to: "/products", label: "Digital Menu (83 Items)" },
+  { to: "/about", label: "About Us" },
+  { to: "/branches", label: "Visit & Directions" },
 ] as const;
 
 const categoryDetails: Record<
   Category,
   {
-    icon: typeof Smartphone;
+    icon: typeof Utensils;
     desc: string;
     badgeColor: string;
     iconColor: string;
   }
 > = {
-  "CCTV & Cameras": {
-    icon: Camera,
-    desc: "4K Dome, WiFi PTZ & outdoor security",
+  "Breakfast & All Time": {
+    icon: Coffee,
+    desc: "String hoppers, idly, dosai, vadai & poori (6:00 AM – 10:00 PM)",
     badgeColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
     iconColor: "text-amber-400 bg-amber-500/15",
   },
-  "Chargers & Cables": {
-    icon: Zap,
-    desc: "65W GaN fast chargers & heavy-duty cables",
-    badgeColor: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-    iconColor: "text-yellow-400 bg-yellow-500/15",
-  },
-  "Repair Tools & Parts": {
-    icon: Wrench,
-    desc: "Toolkits, multimeters & replacement parts",
+  "Lunch": {
+    icon: Utensils,
+    desc: "Vegetarian Rice & Curry, Jaffna Special & Budget Lunch",
     badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
     iconColor: "text-emerald-400 bg-emerald-500/15",
   },
-  "Mobile Phones": {
-    icon: Smartphone,
-    desc: "Flagship 5G Apple, Samsung & Xiaomi",
-    badgeColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-    iconColor: "text-blue-400 bg-blue-500/15",
+  "Evening Special": {
+    icon: Flame,
+    desc: "Masala dosai, ghee dosai, pittu kottu & rotti kottu (4:00 PM – 10:00 PM)",
+    badgeColor: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+    iconColor: "text-orange-400 bg-orange-500/15",
   },
-  "Electronics": {
-    icon: Cpu,
-    desc: "Tablets, desktop tech & accessories",
-    badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
-    iconColor: "text-purple-400 bg-purple-500/15",
-  },
-  "Accessories": {
+  "Diabetes Special": {
     icon: ShieldCheck,
-    desc: "Shockproof cases, 9H glass & car mounts",
+    desc: "Traditional grain Kurakkan & Attama preparations",
+    badgeColor: "bg-teal-500/10 text-teal-400 border-teal-500/20",
+    iconColor: "text-teal-400 bg-teal-500/15",
+  },
+  "Jaffna Palakaaram": {
+    icon: Sparkles,
+    desc: "Kolukattai, Mothakam, Muruku & authentic Odyal Kool",
+    badgeColor: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+    iconColor: "text-yellow-400 bg-yellow-500/15",
+  },
+  "Indian Sweets": {
+    icon: Heart,
+    desc: "Pure ghee Mysore Pak, Jaangiri, Rava Laddoo & Kesari",
     badgeColor: "bg-rose-500/10 text-rose-400 border-rose-500/20",
     iconColor: "text-rose-400 bg-rose-500/15",
   },
-  "Audio": {
-    icon: Headphones,
-    desc: "Active noise-cancelling earbuds & sound",
-    badgeColor: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
-    iconColor: "text-indigo-400 bg-indigo-500/15",
-  },
-  "Smart Watches": {
-    icon: Watch,
-    desc: "AMOLED displays & BT calling fitness bands",
-    badgeColor: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
-    iconColor: "text-cyan-400 bg-cyan-500/15",
+  "Beverages": {
+    icon: CupSoda,
+    desc: "Ceylon tea, ginger tea, coffee, cold drinks & mineral water",
+    badgeColor: "bg-sky-500/10 text-sky-400 border-sky-500/20",
+    iconColor: "text-sky-400 bg-sky-500/15",
   },
 };
 
@@ -111,7 +104,6 @@ export function Navbar() {
 
   const isSearchActive = searchExpanded || searchHovered || searchOpen;
 
-  // Broadcast search active status across app (e.g. to hide FloatingWhatsApp)
   useEffect(() => {
     setSearchActive(isSearchActive);
     return () => {
@@ -161,50 +153,18 @@ export function Navbar() {
     setSearchQuery("");
   };
 
-  // Prioritized search recommendations: startsWith -> wordStartsWith -> contains
   const searchResults = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) return [];
 
-    const startsWithMatches: Product[] = [];
-    const wordStartsMatches: Product[] = [];
-    const containsMatches: Product[] = [];
-    const seenIds = new Set<string>();
-
-    // 1. Exact start of name or brand (e.g. "i" -> "iPhone...", "imou...")
-    for (const p of products) {
-      const name = p.name.toLowerCase();
-      const brand = p.brand.toLowerCase();
-      if (name.startsWith(q) || brand.startsWith(q)) {
-        startsWithMatches.push(p);
-        seenIds.add(p.id);
-      }
-    }
-
-    // 2. Any individual word starting with query (e.g. "iPhone" in "Apple iPhone 15")
-    for (const p of products) {
-      if (seenIds.has(p.id)) continue;
-      const nameWords = p.name.toLowerCase().split(/[\s\-()]+/);
-      const brandWords = p.brand.toLowerCase().split(/[\s\-()]+/);
-      if (nameWords.some((w) => w.startsWith(q)) || brandWords.some((w) => w.startsWith(q))) {
-        wordStartsMatches.push(p);
-        seenIds.add(p.id);
-      }
-    }
-
-    // 3. Contains query anywhere in name, brand, or category
-    for (const p of products) {
-      if (seenIds.has(p.id)) continue;
-      const name = p.name.toLowerCase();
-      const brand = p.brand.toLowerCase();
-      const category = p.category.toLowerCase();
-      if (name.includes(q) || brand.includes(q) || category.includes(q)) {
-        containsMatches.push(p);
-        seenIds.add(p.id);
-      }
-    }
-
-    return [...startsWithMatches, ...wordStartsMatches, ...containsMatches].slice(0, 6);
+    return products
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.itemCode.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q)
+      )
+      .slice(0, 6);
   }, [searchQuery]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -215,46 +175,6 @@ export function Navbar() {
     }
   };
 
-  // Close search on outside click
-  useEffect(() => {
-    if (!isSearchActive) return;
-    const handleOutside = (e: MouseEvent) => {
-      const searchForm = searchInputRef.current?.form;
-      if (searchForm && !searchForm.contains(e.target as Node)) {
-        handleCloseSearch();
-      }
-    };
-    document.addEventListener("mousedown", handleOutside);
-    return () => document.removeEventListener("mousedown", handleOutside);
-  }, [isSearchActive]);
-
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isSearchActive) {
-        handleCloseSearch();
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isSearchActive]);
-
-  // Handle mobile menu scroll lock & keyboard escape accessibility
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-      const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") setOpen(false);
-      };
-      window.addEventListener("keydown", onKeyDown);
-      return () => {
-        document.body.style.overflow = "";
-        window.removeEventListener("keydown", onKeyDown);
-      };
-    } else {
-      document.body.style.overflow = "";
-    }
-  }, [open]);
-
   const handleCategoryMouseEnter = () => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
     setCategoryDropdownOpen(true);
@@ -263,7 +183,7 @@ export function Navbar() {
   const handleCategoryMouseLeave = () => {
     dropdownTimeoutRef.current = setTimeout(() => {
       setCategoryDropdownOpen(false);
-    }, 180);
+    }, 200);
   };
 
   return (
@@ -271,28 +191,29 @@ export function Navbar() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         scrolled
-          ? "border-b border-white/[0.08] bg-[#0b0e14]/90 shadow-md backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent backdrop-blur-sm",
+          ? "border-b border-amber-500/15 bg-[#0d0f14]/95 shadow-lg backdrop-blur-xl"
+          : "border-b border-white/[0.06] bg-[#0d0f14]/80 backdrop-blur-md"
       )}
     >
       <nav
         aria-label="Main navigation"
         className="relative mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:h-18 lg:px-8"
       >
+        {/* Brand Logo & Title */}
         <Link
           to="/"
           className="flex min-w-0 items-center gap-3 shrink-0 group"
           aria-label={`${site.name} home`}
         >
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-blue-600 via-indigo-600 to-sky-400 text-white shadow-lg shadow-blue-600/30 ring-1 ring-white/20 transition-transform duration-200 group-hover:scale-105">
-            <Smartphone className="h-5 w-5" aria-hidden="true" />
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-500 text-black shadow-lg shadow-amber-500/25 ring-1 ring-white/20 transition-transform duration-200 group-hover:scale-105">
+            <Utensils className="h-5 w-5" aria-hidden="true" />
           </span>
           <span className="min-w-0">
-            <span className="block truncate text-base leading-tight font-extrabold bg-gradient-to-r from-white via-slate-100 to-sky-200 bg-clip-text text-transparent">
+            <span className="block truncate text-base sm:text-lg leading-tight font-extrabold text-white">
               {site.name}
             </span>
-            <span className="block text-[10.5px] leading-tight font-bold bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-300 bg-clip-text text-transparent sm:text-[11px] tracking-wide">
-              Mobiles &amp; Electronics
+            <span className="block text-[10px] leading-tight font-bold text-amber-400 sm:text-[11px] tracking-wide">
+              {site.tamilName} • 100% Pure Veg
             </span>
           </span>
         </Link>
@@ -311,8 +232,8 @@ export function Navbar() {
                   <Link
                     to="/categories"
                     activeOptions={{ exact: false }}
-                    className="group relative inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
-                    activeProps={{ className: "text-foreground" }}
+                    className="group relative inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
+                    activeProps={{ className: "text-amber-400 font-bold" }}
                     aria-haspopup="true"
                     aria-expanded={categoryDropdownOpen}
                   >
@@ -322,21 +243,21 @@ export function Navbar() {
                         <ChevronDown
                           className={cn(
                             "h-3.5 w-3.5 text-slate-400 transition-transform duration-200 group-hover:text-white",
-                            categoryDropdownOpen && "rotate-180 text-blue-400",
+                            categoryDropdownOpen && "rotate-180 text-amber-400"
                           )}
                           aria-hidden="true"
                         />
                         <span
                           className={cn(
-                            "absolute inset-x-3 -bottom-0.5 h-0.5 origin-left rounded-full bg-gradient-brand transition-transform duration-300",
-                            isActive || categoryDropdownOpen ? "scale-x-100" : "scale-x-0",
+                            "absolute inset-x-3 -bottom-0.5 h-0.5 origin-left rounded-full bg-amber-400 transition-transform duration-300",
+                            isActive || categoryDropdownOpen ? "scale-x-100" : "scale-x-0"
                           )}
                         />
                       </>
                     )}
                   </Link>
 
-                  {/* ── Premium Mega-Menu Dropdown ── */}
+                  {/* Mega-Menu Dropdown */}
                   <AnimatePresence>
                     {categoryDropdownOpen && (
                       <motion.div
@@ -346,63 +267,55 @@ export function Navbar() {
                         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                         className="absolute left-1/2 -translate-x-1/2 top-full pt-3 w-[720px] max-w-[96vw] z-50 pointer-events-auto"
                       >
-                        {/* Caret arrow */}
-                        <div className="absolute top-1 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 rounded-sm bg-[#0d101c] border-l border-t border-white/10 z-10" />
+                        <div className="absolute top-1 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 rounded-sm bg-[#121622] border-l border-t border-amber-500/20 z-10" />
 
-                        <div className="relative overflow-hidden rounded-2xl border border-white/[0.10] bg-[#0d101c] shadow-[0_24px_60px_rgba(0,0,0,0.7)] backdrop-blur-3xl ring-1 ring-white/[0.06]">
-
-                          {/* Top accent line */}
-                          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/70 to-transparent" />
+                        <div className="relative overflow-hidden rounded-2xl border border-amber-500/25 bg-[#121622] shadow-[0_24px_60px_rgba(0,0,0,0.85)] backdrop-blur-3xl ring-1 ring-white/[0.06]">
+                          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/70 to-transparent" />
 
                           <div className="flex">
-                            {/* ── Left Panel ── */}
-                            <div className="relative flex w-52 shrink-0 flex-col justify-between gap-6 border-r border-white/[0.07] bg-[#0a0d16] p-6">
-                              {/* Subtle radial glow */}
-                              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(59,130,246,0.08),transparent_70%)]" />
-
+                            {/* Left Panel */}
+                            <div className="relative flex w-52 shrink-0 flex-col justify-between gap-6 border-r border-white/[0.07] bg-[#0d1018] p-6">
                               <div className="relative space-y-1">
-                                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-blue-400">
-                                  Departments
+                                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-amber-400">
+                                  Pure Vegetarian
                                 </p>
                                 <h3 className="text-lg font-extrabold leading-tight text-white">
-                                  Browse by Category
+                                  Food Menu
                                 </h3>
                                 <p className="text-[11px] leading-relaxed text-slate-400">
-                                  Find exactly what you need across {categories.length} departments.
+                                  Fresh breakfast, midday meals, evening tiffins &amp; Jaffna heritage sweets.
                                 </p>
                               </div>
 
-                              {/* Total count pill */}
                               <div className="relative flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5">
-                                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-600/20 text-blue-400">
+                                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-amber-400">
                                   <Layers className="h-3.5 w-3.5" />
                                 </span>
                                 <div>
-                                  <p className="text-sm font-extrabold text-white">{products.length}+</p>
-                                  <p className="text-[10px] text-slate-400">Products in stock</p>
+                                  <p className="text-sm font-extrabold text-white">83 Items</p>
+                                  <p className="text-[10px] text-slate-400">100% Pure Veg</p>
                                 </div>
                               </div>
 
                               <Link
-                                to="/categories"
+                                to="/products"
                                 onClick={() => setCategoryDropdownOpen(false)}
-                                className="relative group inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-600/25 transition-all duration-200 hover:bg-blue-500 hover:shadow-blue-500/30 active:scale-[0.98]"
+                                className="relative group inline-flex items-center justify-center gap-1.5 rounded-xl bg-amber-500 px-4 py-2.5 text-xs font-bold text-black shadow-lg shadow-amber-500/25 transition-all duration-200 hover:bg-amber-400 active:scale-[0.98]"
                               >
-                                <span>All Categories</span>
+                                <span>Browse Full Menu</span>
                                 <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
                               </Link>
                             </div>
 
-                            {/* ── Right Panel – Category Grid ── */}
+                            {/* Right Panel - Category Grid */}
                             <div className="flex-1 p-4">
                               <div className="grid grid-cols-2 gap-1.5">
                                 {categories.map((cat) => {
                                   const meta = categoryDetails[cat];
                                   const catProducts = products.filter((p) => p.category === cat);
-                                  const IconComponent = meta?.icon ?? Smartphone;
-                                  // Extract just the icon color class (first word before space)
-                                  const iconTextColor = meta?.iconColor.split(" ")[0] ?? "text-blue-400";
-                                  const iconBgColor = meta?.iconColor.split(" ").slice(1).join(" ") ?? "bg-blue-500/15";
+                                  const IconComponent = meta?.icon ?? Utensils;
+                                  const iconTextColor = meta?.iconColor.split(" ")[0] ?? "text-amber-400";
+                                  const iconBgColor = meta?.iconColor.split(" ").slice(1).join(" ") ?? "bg-amber-500/15";
 
                                   return (
                                     <Link
@@ -412,40 +325,31 @@ export function Navbar() {
                                       onClick={() => setCategoryDropdownOpen(false)}
                                       className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-transparent px-3 py-2.5 transition-all duration-200 hover:border-white/[0.10] hover:bg-white/[0.05] active:scale-[0.98]"
                                     >
-                                      {/* Subtle hover glow behind icon */}
-                                      <div className={cn(
-                                        "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 rounded-xl",
-                                        iconBgColor.replace("/15", "/5"),
-                                      )} />
-
-                                      {/* Icon */}
-                                      <div className={cn(
-                                        "relative grid h-9 w-9 shrink-0 place-items-center rounded-xl border transition-transform duration-200 group-hover:scale-110",
-                                        iconBgColor,
-                                        meta?.badgeColor.split(" ").find(c => c.startsWith("border")) ?? "border-white/10",
-                                      )}>
+                                      <div
+                                        className={cn(
+                                          "relative grid h-9 w-9 shrink-0 place-items-center rounded-xl border transition-transform duration-200 group-hover:scale-110",
+                                          iconBgColor,
+                                          meta?.badgeColor.split(" ").find((c) => c.startsWith("border")) ?? "border-white/10"
+                                        )}
+                                      >
                                         <IconComponent className={cn("h-4 w-4", iconTextColor)} aria-hidden="true" />
                                       </div>
 
-                                      {/* Text */}
                                       <div className="relative min-w-0 flex-1">
                                         <div className="flex items-center justify-between gap-1">
-                                          <p className={cn(
-                                            "truncate text-[13px] font-semibold transition-colors duration-200",
-                                            "text-slate-200 group-hover:text-white",
-                                          )}>
+                                          <p className="truncate text-[13px] font-semibold text-slate-200 group-hover:text-white transition-colors duration-200">
                                             {cat}
                                           </p>
-                                          {/* Count badge */}
-                                          <span className={cn(
-                                            "shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums transition-colors duration-200",
-                                            meta?.badgeColor ?? "bg-blue-500/10 text-blue-400 border-blue-500/20",
-                                            "border",
-                                          )}>
+                                          <span
+                                            className={cn(
+                                              "shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums border",
+                                              meta?.badgeColor ?? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                                            )}
+                                          >
                                             {catProducts.length}
                                           </span>
                                         </div>
-                                        <p className="mt-0.5 line-clamp-1 text-[11px] text-slate-500 group-hover:text-slate-400 transition-colors duration-200">
+                                        <p className="mt-0.5 line-clamp-1 text-[11px] text-slate-400">
                                           {meta?.desc}
                                         </p>
                                       </div>
@@ -454,17 +358,16 @@ export function Navbar() {
                                 })}
                               </div>
 
-                              {/* Footer strip */}
                               <div className="mt-3 flex items-center justify-between border-t border-white/[0.06] pt-3">
-                                <p className="text-[11px] text-slate-500">
-                                  Showing {categories.length} departments
+                                <p className="text-[11px] text-slate-400">
+                                  Showing all 7 food categories
                                 </p>
                                 <Link
                                   to="/products"
                                   onClick={() => setCategoryDropdownOpen(false)}
-                                  className="group inline-flex items-center gap-1 text-[11px] font-semibold text-slate-400 transition-colors hover:text-white"
+                                  className="group inline-flex items-center gap-1 text-[11px] font-semibold text-amber-400 transition-colors hover:text-amber-300"
                                 >
-                                  <span>View all products</span>
+                                  <span>View digital menu (83 items)</span>
                                   <ArrowRight className="h-3 w-3 transition-transform duration-150 group-hover:translate-x-0.5" />
                                 </Link>
                               </div>
@@ -483,16 +386,16 @@ export function Navbar() {
                 <Link
                   to={link.to}
                   activeOptions={{ exact: link.to === "/" }}
-                  className="relative rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
-                  activeProps={{ className: "text-foreground" }}
+                  className="relative rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
+                  activeProps={{ className: "text-amber-400 font-bold" }}
                 >
                   {({ isActive }) => (
                     <>
                       {link.label}
                       <span
                         className={cn(
-                          "absolute inset-x-3 -bottom-0.5 h-0.5 origin-left rounded-full bg-gradient-brand transition-transform duration-300",
-                          isActive ? "scale-x-100" : "scale-x-0",
+                          "absolute inset-x-3 -bottom-0.5 h-0.5 origin-left rounded-full bg-amber-400 transition-transform duration-300",
+                          isActive ? "scale-x-100" : "scale-x-0"
                         )}
                       />
                     </>
@@ -503,335 +406,103 @@ export function Navbar() {
           })}
         </ul>
 
-        <div className="ml-auto flex items-center gap-1.5">
-          {/* Animated WhatsApp Quick Button: Hides when search is hovered or clicked */}
-          <AnimatePresence initial={false}>
-            {!isSearchActive && (
-              <motion.a
-                key="nav-whatsapp-btn"
-                href={whatsappLink(waMessages.general())}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Chat on WhatsApp"
-                initial={{ opacity: 0, scale: 0.85, width: 0 }}
-                animate={{ opacity: 1, scale: 1, width: "auto" }}
-                exit={{ opacity: 0, scale: 0.85, width: 0 }}
-                transition={{ duration: 0.22, ease: "easeOut" }}
-                className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-[#25D366]/30 bg-[#25D366]/10 px-3 py-2 text-xs font-bold text-[#25D366] transition-colors duration-200 hover:bg-[#25D366] hover:text-white hover:shadow-[0_0_15px_rgba(37,211,102,0.4)] active:scale-[0.98] overflow-hidden whitespace-nowrap"
-              >
-                <WhatsAppIcon size={15} colored={false} className="shrink-0" />
-                <span>WhatsApp</span>
-              </motion.a>
-            )}
-          </AnimatePresence>
+        {/* Right side controls */}
+        <div className="ml-auto flex items-center gap-2">
+          {/* Quick Google Maps directions link */}
+          <a
+            href={site.googleMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-bold text-amber-300 hover:bg-amber-500 hover:text-black transition-all"
+          >
+            <Navigation className="h-3.5 w-3.5" />
+            <span>Find Us (KKS Rd)</span>
+          </a>
 
-          {/* Animated Search Box: Expands with spring animation when hovered or clicked */}
-          <AnimatePresence mode="wait">
-            {isSearchActive ? (
-              <motion.form
-                key="nav-search-expanded"
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ type: "spring", stiffness: 450, damping: 30 }}
-                onSubmit={handleSearchSubmit}
-                onMouseEnter={handleSearchMouseEnter}
-                onMouseLeave={handleSearchMouseLeave}
-                className={cn(
-                  "flex items-center gap-2 rounded-full border border-blue-500/50 bg-[#0e1220] px-3.5 py-1.5 shadow-xl ring-1 ring-blue-500/20 backdrop-blur-2xl transition-all",
-                  "absolute inset-x-4 inset-y-2.5 z-50 sm:relative sm:inset-auto sm:w-64 md:w-72 lg:w-80",
-                )}
-              >
-                <Search className="h-4 w-4 text-blue-400 shrink-0" aria-hidden="true" />
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search phones, CCTV, chargers..."
-                  aria-label="Search store products"
-                  className="w-full bg-transparent text-xs sm:text-sm font-medium text-white placeholder-slate-400 outline-none"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="rounded p-1 text-slate-400 hover:text-white transition-colors shrink-0"
-                    aria-label="Clear search input"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen(true)}
-                  className="hidden lg:inline-flex rounded bg-blue-600/20 px-1.5 py-0.5 text-[10px] font-bold text-blue-300 hover:bg-blue-600 hover:text-white transition-colors shrink-0"
-                  title="Spotlight Search Modal"
-                >
-                  Modal
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCloseSearch}
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-white/[0.08] hover:text-white transition-colors shrink-0"
-                  aria-label="Close search"
-                >
-                  <X className="h-4 w-4" />
-                </button>
+          {/* Search Trigger */}
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Open search dialog"
+            className="grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] hover:text-white transition-colors"
+          >
+            <Search className="h-4 w-4 text-amber-400" />
+          </button>
 
-                {/* ── Live Instant Recommended Products Dropdown ── */}
-                <AnimatePresence>
-                  {searchQuery.trim().length > 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute left-0 right-0 top-full mt-2.5 overflow-hidden rounded-2xl border border-white/10 bg-[#0d101c]/98 shadow-[0_24px_60px_rgba(0,0,0,0.85)] backdrop-blur-3xl ring-1 ring-white/10 sm:left-auto sm:right-0 sm:w-80 md:w-96 z-50 text-left cursor-default"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {/* Header with match count */}
-                      <div className="flex items-center justify-between border-b border-white/[0.07] bg-white/[0.03] px-4 py-2.5">
-                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-400">
-                          Recommended Products
-                        </span>
-                        <span className="text-[11px] font-semibold text-slate-400">
-                          {searchResults.length} {searchResults.length === 1 ? "match" : "matches"}
-                        </span>
-                      </div>
-
-                      {/* Products List */}
-                      {searchResults.length > 0 ? (
-                        <div className="max-h-[340px] overflow-y-auto divide-y divide-white/[0.04] p-1.5 scrollbar-thin">
-                          {searchResults.map((product) => (
-                            <Link
-                              key={product.id}
-                              to="/products/$id"
-                              params={{ id: product.id }}
-                              onClick={() => handleCloseSearch()}
-                              className="group flex items-center gap-3 rounded-xl p-2.5 transition-all duration-150 hover:bg-white/[0.06] active:scale-[0.99]"
-                            >
-                              <img
-                                src={product.image}
-                                alt={product.name}
-                                className="h-11 w-11 shrink-0 rounded-xl object-cover bg-white/5 border border-white/10 ring-1 ring-white/5"
-                              />
-                              <div className="flex-1 min-w-0">
-                                <p className="truncate text-xs font-semibold text-slate-200 group-hover:text-white transition-colors">
-                                  {product.name}
-                                </p>
-                                <div className="mt-1 flex items-center gap-2">
-                                  <span className="rounded bg-white/[0.06] px-1.5 py-0.5 text-[10px] font-semibold text-slate-300 border border-white/[0.08]">
-                                    {product.brand}
-                                  </span>
-                                  <span className="text-[11px] font-extrabold text-blue-400">
-                                    {formatPrice(product)}
-                                  </span>
-                                </div>
-                              </div>
-                              <ArrowRight className="h-4 w-4 text-slate-500 opacity-0 group-hover:opacity-100 group-hover:text-blue-400 transition-all -translate-x-1.5 group-hover:translate-x-0 shrink-0" />
-                            </Link>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="px-5 py-7 text-center">
-                          <p className="text-xs font-semibold text-slate-300">
-                            No products found matching <span className="text-blue-400">"{searchQuery}"</span>
-                          </p>
-                          <p className="mt-1 text-[11px] text-slate-500">
-                            Try searching for iPhone, Galaxy, Sentinel, Anker, Sony, or Fluke.
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Footer: View all results in search page */}
-                      {searchResults.length > 0 && (
-                        <div className="border-t border-white/[0.06] bg-white/[0.02] p-2.5 text-center">
-                          <Link
-                            to="/products"
-                            search={{ q: searchQuery.trim() }}
-                            onClick={() => handleCloseSearch()}
-                            className="group inline-flex items-center gap-1.5 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors"
-                          >
-                            <span>View all results for "{searchQuery.trim()}"</span>
-                            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
-                          </Link>
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.form>
-            ) : (
-              <motion.button
-                key="nav-search-icon"
-                type="button"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.18 }}
-                onMouseEnter={handleSearchMouseEnter}
-                onMouseLeave={handleSearchMouseLeave}
-                onClick={handleOpenSearch}
-                aria-label="Open search box"
-                className="grid h-11 w-11 place-items-center rounded-xl text-slate-300 transition-all duration-200 hover:bg-white/[0.08] hover:text-white active:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-              >
-                <Search className="h-5 w-5" aria-hidden="true" />
-              </motion.button>
-            )}
-          </AnimatePresence>
-
-          {/* Navigation Menu Hamburger Button (44px WCAG tap target) */}
+          {/* Mobile menu trigger */}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-            className={cn(
-              "grid h-11 w-11 place-items-center rounded-xl transition-colors hover:bg-white/[0.08] active:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 lg:hidden",
-              open ? "bg-white/[0.1] text-white" : "text-slate-300 hover:text-white",
-            )}
+            aria-label={open ? "Close menu" : "Open menu"}
+            className="grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] hover:text-white lg:hidden"
           >
-            {open ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </nav>
 
-      {/* Professional Spotlight Command Search Dialog */}
+      {/* Spotlight Command Search Dialog */}
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
-      {/* Mobile Drawer Menu with Framer Motion */}
+      {/* Mobile Drawer Menu */}
       <AnimatePresence>
         {open && (
           <motion.div
             id="mobile-menu"
-            initial={{ opacity: 0, height: 0, y: -8 }}
-            animate={{ opacity: 1, height: "auto", y: 0 }}
-            exit={{ opacity: 0, height: 0, y: -8 }}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="border-t border-white/[0.08] bg-[#0b0e17]/98 backdrop-blur-2xl lg:hidden overflow-hidden shadow-2xl"
+            className="border-t border-white/[0.08] bg-[#0d1018]/98 backdrop-blur-2xl lg:hidden overflow-hidden shadow-2xl"
           >
-            <ul className="mx-auto flex w-full max-w-7xl flex-col gap-1.5 px-4 py-3 sm:px-6">
-              {links.map((link, idx) => {
-                if (link.to === "/categories") {
-                  return (
-                    <motion.li
-                      key={link.to}
-                      initial={{ opacity: 0, x: -12 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.035, duration: 0.25 }}
-                      className="flex flex-col"
-                    >
-                      <div className="flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/[0.06] hover:text-white">
-                        <Link
-                          to="/categories"
-                          onClick={() => setOpen(false)}
-                          className="flex-1 font-semibold"
-                        >
-                          {link.label}
-                        </Link>
-                        <motion.button
-                          type="button"
-                          whileTap={{ scale: 0.85 }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setMobileCategoriesOpen((prev) => !prev);
-                          }}
-                          className="p-1 text-slate-400 hover:text-white"
-                          aria-label="Toggle categories list"
-                        >
-                          <ChevronDown
-                            className={cn(
-                              "h-4 w-4 transition-transform duration-200",
-                              mobileCategoriesOpen && "rotate-180 text-blue-400"
-                            )}
-                          />
-                        </motion.button>
-                      </div>
-
-                      {/* Mobile Categories Collapsible Sub-list */}
-                      <AnimatePresence>
-                        {mobileCategoriesOpen && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                            className="overflow-hidden pl-3 pr-1 py-1 flex flex-col gap-0.5 border-l-2 border-blue-500/40 ml-3.5 my-1"
-                          >
-                            {categories.map((cat) => {
-                              const meta = categoryDetails[cat];
-                              const IconComp = meta?.icon ?? Smartphone;
-                              return (
-                                <Link
-                                  key={cat}
-                                  to="/products"
-                                  search={{ category: cat }}
-                                  onClick={() => {
-                                    setOpen(false);
-                                    setMobileCategoriesOpen(false);
-                                  }}
-                                  className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-xs font-medium text-slate-300 hover:bg-white/[0.06] hover:text-white transition-colors active:scale-98"
-                                >
-                                  <IconComp className={cn("h-3.5 w-3.5", meta?.iconColor.split(" ")[0])} />
-                                  <span>{cat}</span>
-                                </Link>
-                              );
-                            })}
-                            <Link
-                              to="/categories"
-                              onClick={() => {
-                                setOpen(false);
-                                setMobileCategoriesOpen(false);
-                              }}
-                              className="mt-1 flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors"
-                            >
-                              <Layers className="h-3.5 w-3.5" />
-                              <span>View all categories page →</span>
-                            </Link>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.li>
-                  );
-                }
-
-                return (
-                  <motion.li
-                    key={link.to}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.035, duration: 0.25 }}
+            <motion.ul
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={{
+                open: { transition: { staggerChildren: 0.045, delayChildren: 0.06 } },
+                closed: { transition: { staggerChildren: 0.025, staggerDirection: -1 } },
+              }}
+              className="mx-auto flex w-full max-w-7xl flex-col gap-1.5 px-4 py-3 sm:px-6"
+            >
+              {links.map((link) => (
+                <motion.li
+                  key={link.to}
+                  variants={{
+                    open: { opacity: 1, x: 0 },
+                    closed: { opacity: 0, x: -10 },
+                  }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Link
+                    to={link.to}
+                    onClick={() => setOpen(false)}
+                    className="block rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-300 hover:bg-white/[0.06] hover:text-white transition-colors"
                   >
-                    <Link
-                      to={link.to}
-                      activeOptions={{ exact: link.to === "/" }}
-                      className="block rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/[0.06] hover:text-white active:scale-98"
-                      activeProps={{ className: "bg-blue-600/15 text-blue-400 font-bold" }}
-                      onClick={() => setOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.li>
-                );
-              })}
-            </ul>
-
-            {/* Mobile WhatsApp Quick Action */}
-            <div className="mx-auto w-full max-w-7xl px-4 pb-4 pt-1 sm:px-6">
-              <motion.a
-                href={whatsappLink(waMessages.general())}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                whileTap={{ scale: 0.96 }}
-                className="flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-500/25 active:scale-[0.98]"
+                    {link.label}
+                  </Link>
+                </motion.li>
+              ))}
+              <motion.li
+                variants={{
+                  open: { opacity: 1, x: 0 },
+                  closed: { opacity: 0, x: -10 },
+                }}
+                className="pt-2"
               >
-                <WhatsAppIcon size={18} colored={false} className="shrink-0" />
-                <span>Chat on WhatsApp</span>
-              </motion.a>
-            </div>
+                <a
+                  href={site.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 px-4 py-3 text-xs font-bold text-stone-950 shadow-md shadow-amber-500/20 active:scale-[0.98] transition-all"
+                >
+                  <Navigation className="h-3.5 w-3.5 fill-stone-950" />
+                  <span>Get Directions on Google Maps</span>
+                </a>
+              </motion.li>
+            </motion.ul>
           </motion.div>
         )}
       </AnimatePresence>
