@@ -18,5 +18,9 @@ export const site = {
   phone: "Inquire in Person",
   phoneNotice: "Official direct phone number will be listed upon confirmation.",
   googleMapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=Vishnu%20Bhavan%2C%20No.%20350%2C%20Jaffna-Kankesanturai%20Road%2C%20Jaffna%2C%20Sri%20Lanka",
+    "https://www.google.com/search?q=vishnu+bhavan#lrd=0x3afe5400db46f745:0xbb7d65884c772a5c,1",
+  googleReviewsUrl:
+    "https://www.google.com/search?q=vishnu+bhavan#lrd=0x3afe5400db46f745:0xbb7d65884c772a5c,1",
+  googleWriteReviewUrl:
+    "https://www.google.com/search?q=vishnu+bhavan#lrd=0x3afe5400db46f745:0xbb7d65884c772a5c,3",
 } as const;
