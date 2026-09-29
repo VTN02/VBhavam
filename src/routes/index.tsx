@@ -1,47 +1,32 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   Clock,
-  ExternalLink,
   MapPin,
   Navigation,
-  Phone,
-  Search,
   Sparkles,
   Utensils,
   UtensilsCrossed,
-  X,
-  MessageCircle,
-  ShieldCheck,
   CheckCircle,
   Copy,
   Check,
   Share2,
+  ExternalLink,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { site } from "@/config/site";
+import { products } from "@/data/products";
 import {
-  products,
-  type Product,
-  type Category,
-  formatPrice,
-} from "@/data/products";
-import {
-  menuCategories,
-  servingSchedules,
   featuredMenuItems,
-  type MenuCategoryId,
 } from "@/data/restaurant";
 import { Hero } from "@/components/Hero";
 import { TrustBar } from "@/components/TrustBar";
 import { CategoryShowcase } from "@/components/CategoryShowcase";
 import { ProductCard } from "@/components/ProductCard";
-import { GoogleMapsIcon } from "@/components/icons/BrandIcons";
 import { Reveal } from "@/components/Reveal";
+import { ReviewSection } from "@/components/ReviewSection";
 import lunchFeast from "@/assets/lunch-feast.jpg";
-import heroFeast from "@/assets/hero-feast.jpg";
-import eveningSpecial from "@/assets/evening-special.jpg";
 
 const title = `${site.name} — 100% Pure Vegetarian South Indian & Jaffna Restaurant`;
 const description =
@@ -63,10 +48,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [menuSearchQuery, setMenuSearchQuery] = useState("");
   const [copiedAddress, setCopiedAddress] = useState(false);
-  const menuSectionRef = useRef<HTMLElement>(null);
 
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(site.address);
@@ -90,32 +72,8 @@ function Home() {
     }
   };
 
-  // Filtered menu items for the digital menu section
-  const filteredProducts = useMemo(() => {
-    let result = products;
-
-    if (selectedCategory !== "All") {
-      result = result.filter((p) => p.category === selectedCategory);
-    }
-
-    if (menuSearchQuery.trim()) {
-      const q = menuSearchQuery.trim().toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.itemCode.toLowerCase().includes(q) ||
-          p.shortDescription.toLowerCase().includes(q) ||
-          (p.tag && p.tag.toLowerCase().includes(q))
-      );
-    }
-
-    return result;
-  }, [selectedCategory, menuSearchQuery]);
-
-  const handleSelectSchedule = (categoryName: string) => {
-    setSelectedCategory(categoryName);
-    menuSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  // Show only 12 items from featured or first 12 products
+  const homeMenuItems = products.slice(0, 12);
 
   return (
     <div className="flex flex-col bg-[#0d0f14] text-foreground">
@@ -173,14 +131,13 @@ function Home() {
               </div>
 
               <div className="mt-6 pt-4 border-t border-white/[0.08]">
-                <button
-                  type="button"
-                  onClick={() => handleSelectSchedule("Breakfast & All Time")}
+                <Link
+                  to="/products"
                   className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500/15 border border-amber-500/30 px-4 py-2.5 text-xs font-bold text-amber-300 hover:bg-amber-500 hover:text-black transition-all cursor-pointer"
                 >
                   <span>View Breakfast &amp; All Time Menu</span>
                   <ArrowRight className="h-3.5 w-3.5" />
-                </button>
+                </Link>
               </div>
             </motion.div>
 
@@ -196,27 +153,24 @@ function Home() {
                   <Sparkles className="h-3 w-3" />
                   Midday Specials
                 </span>
-                <h3 className="mt-4 text-2xl font-extrabold text-white">
-                  Lunch
-                </h3>
+                <h3 className="mt-4 text-2xl font-extrabold text-white">Lunch</h3>
                 <div className="mt-2 flex items-center gap-2 text-sm font-bold text-emerald-400 font-mono">
                   <Clock className="h-4 w-4" />
                   <span>11:00 AM – 3:00 PM</span>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-slate-300">
-                  Traditional vegetarian Rice &amp; Curry, Budget Lunch pack, Jaffna Special Lunch, and varieties.
+                  Traditional rice & curry feasts, Jaffna Special Lunch, Budget Lunch, and vegetarian biryani.
                 </p>
               </div>
 
               <div className="mt-6 pt-4 border-t border-white/[0.08]">
-                <button
-                  type="button"
-                  onClick={() => handleSelectSchedule("Lunch")}
+                <Link
+                  to="/products"
                   className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 px-4 py-2.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500 hover:text-black transition-all cursor-pointer"
                 >
                   <span>View Lunch Menu</span>
                   <ArrowRight className="h-3.5 w-3.5" />
-                </button>
+                </Link>
               </div>
             </motion.div>
 
@@ -224,96 +178,42 @@ function Home() {
             <motion.div
               whileHover={{ y: -6 }}
               transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-orange-500/25 bg-gradient-to-b from-[#1f1917] to-[#120f0d] p-6 shadow-xl backdrop-blur-md"
+              className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-orange-500/25 bg-gradient-to-b from-[#1d1410] to-[#12100d] p-6 shadow-xl backdrop-blur-md"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
               <div>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-orange-500/15 border border-orange-500/30 px-3 py-1 text-xs font-bold text-orange-300">
                   <Sparkles className="h-3 w-3" />
-                  Fresh Evening Tiffin
+                  Evening Eats
                 </span>
-                <h3 className="mt-4 text-2xl font-extrabold text-white">
-                  Evening Special
-                </h3>
+                <h3 className="mt-4 text-2xl font-extrabold text-white">Evening Special</h3>
                 <div className="mt-2 flex items-center gap-2 text-sm font-bold text-orange-400 font-mono">
                   <Clock className="h-4 w-4" />
                   <span>4:00 PM – 10:00 PM</span>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-slate-300">
-                  Crispy ghee &amp; masala dosai, pittu kottu, rotti kottu, string hoppers biryani &amp; hot poori sets.
+                  Masala dosai, ghee dosai, pittu kottu, rotti kottu, and crispy evening favourites.
                 </p>
               </div>
 
               <div className="mt-6 pt-4 border-t border-white/[0.08]">
-                <button
-                  type="button"
-                  onClick={() => handleSelectSchedule("Evening Special")}
+                <Link
+                  to="/products"
                   className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500/15 border border-orange-500/30 px-4 py-2.5 text-xs font-bold text-orange-300 hover:bg-orange-500 hover:text-black transition-all cursor-pointer"
                 >
-                  <span>View Evening Special Menu</span>
+                  <span>View Evening Menu</span>
                   <ArrowRight className="h-3.5 w-3.5" />
-                </button>
+                </Link>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ── 4. POPULAR CHOICES / FEATURED MENU ── */}
-      <section id="featured" className="relative py-16 sm:py-20 lg:py-24 bg-[#0e1118] overflow-hidden">
-        <span className="glow-orb top-[-10%] left-[-5%] h-96 w-96 bg-amber-500/15" aria-hidden="true" />
-        <span className="glow-orb bottom-[-10%] right-[-5%] h-80 w-80 bg-emerald-500/10" aria-hidden="true" />
-
-        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-bold tracking-[0.14em] text-amber-300 uppercase">
-              <Sparkles className="h-3.5 w-3.5" />
-              Popular Choices
-            </span>
-            <h2 className="mt-4 text-3xl font-extrabold text-white sm:text-4xl tracking-tight">
-              Featured Menu
-            </h2>
-            <p className="mt-3 text-base text-slate-300">
-              A curated highlight of iconic South Indian favourites and authentic Jaffna delicacies prepared daily.
-            </p>
-          </div>
-
-          {/* 9 Highlighted Featured Dishes Grid (2 columns on mobile) */}
-          <div className="mt-8 sm:mt-12 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-            {featuredMenuItems.map((item) => {
-              const matchedProduct = products.find((p) => p.itemCode === item.itemCode);
-              if (!matchedProduct) return null;
-
-              return (
-                <Reveal key={item.id}>
-                  <ProductCard product={matchedProduct} />
-                </Reveal>
-              );
-            })}
-          </div>
-
-          {/* Browse Complete Menu CTA */}
-          <div className="mt-12 flex justify-center">
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedCategory("All");
-                menuSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-500 hover:from-amber-400 hover:to-amber-500 px-8 py-3.5 text-sm font-extrabold text-black shadow-lg shadow-amber-500/25 transition-all duration-200 cursor-pointer active:scale-95"
-            >
-              <span>Browse Complete Menu (60+ Items)</span>
-              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 5. DIGITAL MENU (COMPLETE FOOD MENU WITH ALL 83 ITEMS) ── */}
+      {/* ── 5. OUR MENU (12 ITEMS PREVIEW) ── */}
       <section
-        ref={menuSectionRef}
-        id="digital-menu"
-        className="relative py-16 sm:py-20 lg:py-24 bg-[#0a0c10] overflow-hidden"
+        id="menu"
+        className="relative py-16 sm:py-20 lg:py-24 bg-[#0e1118] overflow-hidden"
       >
         <span className="glow-orb top-[-10%] right-[-5%] h-96 w-96 bg-amber-600/10" aria-hidden="true" />
         <span className="glow-orb bottom-[-10%] left-[-5%] h-80 w-80 bg-orange-600/10" aria-hidden="true" />
@@ -322,128 +222,23 @@ function Home() {
           <div className="text-center max-w-3xl mx-auto">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1 text-xs font-bold tracking-[0.14em] text-emerald-300 uppercase">
               <Utensils className="h-3.5 w-3.5" />
-              Digital Menu
+              Our Menu
             </span>
             <h2 className="mt-4 text-3xl font-extrabold text-white sm:text-4xl tracking-tight">
-              Our Complete Food Menu
+              Popular Dishes
             </h2>
             <p className="mt-3 text-base text-slate-300">
-              Explore authentic South Indian breakfasts, traditional Jaffna rice meals, evening tiffins, sweets, and beverages.
+              A taste of our most-loved South Indian and Jaffna specialties — freshly prepared every day.
             </p>
           </div>
 
-          {/* Search Input for Menu Items */}
-          <div className="mt-8 max-w-md mx-auto">
-            <div className="relative flex items-center rounded-2xl border border-amber-500/20 bg-[#141722] px-4 py-2.5 shadow-lg backdrop-blur-md">
-              <Search className="h-4 w-4 text-amber-400 shrink-0" />
-              <input
-                type="text"
-                value={menuSearchQuery}
-                onChange={(e) => setMenuSearchQuery(e.target.value)}
-                placeholder="Search dish name or item number (e.g. #050, Masala Dosai, Kool)..."
-                className="w-full bg-transparent px-3 text-xs sm:text-sm text-white placeholder-slate-400 outline-none"
-              />
-              {menuSearchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setMenuSearchQuery("")}
-                  className="text-slate-400 hover:text-white"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Category Tabs with Item Counts */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
-            {[
-              { label: "All", count: 83 },
-              { label: "Breakfast & All Time", count: 24, timing: "6:00 AM – 10:00 PM" },
-              { label: "Lunch", count: 7, timing: "11:00 AM – 3:00 PM" },
-              { label: "Evening Special", count: 11, timing: "4:00 PM – 10:00 PM" },
-              { label: "Diabetes Special", count: 8 },
-              { label: "Jaffna Palakaaram", count: 6 },
-              { label: "Indian Sweets", count: 7 },
-              { label: "Beverages", count: 20 },
-            ].map((cat) => {
-              const isActive = selectedCategory === cat.label;
-              return (
-                <motion.button
-                  key={cat.label}
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSelectedCategory(cat.label)}
-                  className={`group relative inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition-colors duration-200 outline-none cursor-pointer ${
-                    isActive
-                      ? "text-stone-950 font-extrabold"
-                      : "text-slate-300 hover:text-white"
-                  }`}
-                >
-                  {/* Sliding Golden Pill Indicator */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeCategoryPill"
-                      className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 shadow-lg shadow-amber-500/30"
-                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
-                    />
-                  )}
-                  {!isActive && (
-                    <span className="absolute inset-0 rounded-full border border-white/10 bg-[#141722] group-hover:border-amber-400/40 transition-colors" />
-                  )}
-                  <span className="relative z-10">{cat.label}</span>
-                  <span
-                    className={`relative z-10 rounded-full px-1.5 py-0.2 text-[10px] font-extrabold transition-colors ${
-                      isActive
-                        ? "bg-black/20 text-stone-950"
-                        : "bg-white/[0.08] text-slate-400 group-hover:text-amber-300"
-                    }`}
-                  >
-                    {cat.count}
-                  </span>
-                </motion.button>
-              );
-            })}
-          </div>
-
-          {/* Active Timing Header Strip */}
-          <div className="mt-6 flex items-center justify-between border-b border-white/[0.08] pb-4">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-extrabold text-white">
-                {selectedCategory}
-              </span>
-              <span className="text-xs text-slate-400 font-mono">
-                ({filteredProducts.length} items available)
-              </span>
-            </div>
-
-            {selectedCategory === "Breakfast & All Time" && (
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
-                <Clock className="h-3 w-3" />
-                6:00 AM – 10:00 PM
-              </span>
-            )}
-            {selectedCategory === "Lunch" && (
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
-                <Clock className="h-3 w-3" />
-                11:00 AM – 3:00 PM
-              </span>
-            )}
-            {selectedCategory === "Evening Special" && (
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-400 bg-orange-500/10 border border-orange-500/20 px-3 py-1 rounded-full">
-                <Clock className="h-3 w-3" />
-                4:00 PM – 10:00 PM
-              </span>
-            )}
-          </div>
-
-          {/* Dish Grid with Framer Motion AnimatePresence & Layout transitions */}
+          {/* 4-Column Grid — 12 items */}
           <motion.div
             layout
-            className="mt-8 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6"
+            className="mt-10 sm:mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6"
           >
             <AnimatePresence mode="popLayout">
-              {filteredProducts.map((product, idx) => (
+              {homeMenuItems.map((product, idx) => (
                 <motion.div
                   key={product.id}
                   layout
@@ -454,31 +249,28 @@ function Home() {
                     type: "spring",
                     stiffness: 400,
                     damping: 28,
-                    delay: Math.min(idx * 0.015, 0.25),
+                    delay: Math.min(idx * 0.04, 0.3),
                   }}
                   className="w-full"
                 >
-                  <ProductCard product={product} />
+                  <Reveal>
+                    <ProductCard product={product} />
+                  </Reveal>
                 </motion.div>
               ))}
             </AnimatePresence>
           </motion.div>
 
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-base text-slate-400">No dishes match your search query.</p>
-              <button
-                type="button"
-                onClick={() => {
-                  setMenuSearchQuery("");
-                  setSelectedCategory("All");
-                }}
-                className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-amber-400 hover:underline"
-              >
-                Reset filters
-              </button>
-            </div>
-          )}
+          {/* View All Button */}
+          <div className="mt-12 flex justify-center">
+            <Link
+              to="/products"
+              className="group inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-400 px-8 py-3.5 text-sm font-extrabold text-stone-950 shadow-lg shadow-amber-500/30 transition-all duration-200 cursor-pointer active:scale-95"
+            >
+              <span>View All 83 Menu Items</span>
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -545,29 +337,30 @@ function Home() {
               </div>
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <a
-                  href="#schedule"
+                <Link
+                  to="/products"
                   className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-bold text-black hover:bg-amber-400 transition-colors"
                 >
-                  <span>View Serving Schedule</span>
+                  <span>Browse Full Menu</span>
                   <ArrowRight className="h-4 w-4" />
-                </a>
-                <a
-                  href={site.googleMapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                </Link>
+                <Link
+                  to="/contact"
                   className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/[0.05] px-6 py-3 text-sm font-bold text-white hover:bg-white/[0.1] transition-colors"
                 >
                   <Navigation className="h-4 w-4 text-amber-400" />
                   <span>Get Directions</span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 7. VISIT US / FIND US IN JAFFNA ── */}
+      {/* ── 7. REVIEWS SECTION ── */}
+      <ReviewSection />
+
+      {/* ── 8. VISIT US / FIND US IN JAFFNA ── */}
       <section id="visit" className="relative py-16 sm:py-20 lg:py-24 bg-[#0a0c10] overflow-hidden">
         <span className="glow-orb top-[-10%] right-[-5%] h-96 w-96 bg-amber-500/10" aria-hidden="true" />
 
@@ -625,9 +418,9 @@ function Home() {
                 </div>
               </div>
 
-              {/* Cohesive Modern Info Cards */}
+              {/* Info Cards */}
               <div className="mt-5 space-y-3">
-                {/* 1. Address Card */}
+                {/* Address Card */}
                 <div className="group relative rounded-xl border border-white/[0.08] bg-white/[0.02] p-3.5 sm:p-4 hover:border-amber-500/30 hover:bg-white/[0.04] transition-all">
                   <div className="flex items-start gap-3">
                     <div className="h-9 w-9 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 text-amber-400 mt-0.5">
@@ -644,15 +437,9 @@ function Home() {
                           className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-400/80 hover:text-amber-300 transition-colors"
                         >
                           {copiedAddress ? (
-                            <>
-                              <Check className="h-3 w-3 text-emerald-400" />
-                              <span className="text-emerald-400">Copied</span>
-                            </>
+                            <><Check className="h-3 w-3 text-emerald-400" /><span className="text-emerald-400">Copied</span></>
                           ) : (
-                            <>
-                              <Copy className="h-3 w-3" />
-                              <span>Copy</span>
-                            </>
+                            <><Copy className="h-3 w-3" /><span>Copy</span></>
                           )}
                         </button>
                       </div>
@@ -666,7 +453,7 @@ function Home() {
                   </div>
                 </div>
 
-                {/* 2. Hours Card with Meal Schedule */}
+                {/* Hours Card */}
                 <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-3.5 sm:p-4">
                   <div className="flex items-start gap-3">
                     <div className="h-9 w-9 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 text-emerald-400 mt-0.5">
@@ -677,31 +464,19 @@ function Home() {
                         <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
                           Operating Hours
                         </span>
-                        <span className="text-[10px] font-semibold text-slate-400">
-                          7 Days a Week
-                        </span>
+                        <span className="text-[10px] font-semibold text-slate-400">7 Days a Week</span>
                       </div>
-                      <p className="mt-0.5 font-bold text-white text-sm sm:text-base font-mono">
-                        6:00 AM – 10:00 PM
-                      </p>
-                      
-                      {/* Meal service pills */}
+                      <p className="mt-0.5 font-bold text-white text-sm sm:text-base font-mono">6:00 AM – 10:00 PM</p>
                       <div className="mt-2 flex flex-wrap gap-1.5 text-[10px]">
-                        <span className="rounded bg-white/[0.05] border border-white/10 px-1.5 py-0.5 text-slate-300 font-medium">
-                          Breakfast: 6 AM – 10 PM
-                        </span>
-                        <span className="rounded bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 text-amber-300 font-medium">
-                          Lunch: 11 AM – 3 PM
-                        </span>
-                        <span className="rounded bg-orange-500/10 border border-orange-500/20 px-1.5 py-0.5 text-orange-300 font-medium">
-                          Evening: 4 PM – 10 PM
-                        </span>
+                        <span className="rounded bg-white/[0.05] border border-white/10 px-1.5 py-0.5 text-slate-300 font-medium">Breakfast: 6 AM – 10 PM</span>
+                        <span className="rounded bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 text-amber-300 font-medium">Lunch: 11 AM – 3 PM</span>
+                        <span className="rounded bg-orange-500/10 border border-orange-500/20 px-1.5 py-0.5 text-orange-300 font-medium">Evening: 4 PM – 10 PM</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* 3. Dining & Inquiries Card */}
+                {/* Dining & Inquiries Card */}
                 <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-3.5 sm:p-4">
                   <div className="flex items-start gap-3">
                     <div className="h-9 w-9 rounded-lg bg-sky-500/15 border border-sky-500/30 flex items-center justify-center shrink-0 text-sky-400 mt-0.5">
@@ -722,9 +497,8 @@ function Home() {
                 </div>
               </div>
 
-              {/* Action Buttons: Unified, High-Conversion Mobile Actions */}
+              {/* Action Buttons */}
               <div className="mt-5 space-y-2.5">
-                {/* Primary: Get Directions in Google Maps */}
                 <a
                   href={site.googleMapsUrl}
                   target="_blank"
@@ -735,7 +509,6 @@ function Home() {
                   <span>Get Directions in Google Maps</span>
                 </a>
 
-                {/* Secondary Row: Copy Address & Share Location */}
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
@@ -743,15 +516,9 @@ function Home() {
                     className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] py-2.5 px-3 text-xs font-semibold text-slate-200 hover:bg-white/[0.08] hover:text-white active:scale-[0.98] transition-all"
                   >
                     {copiedAddress ? (
-                      <>
-                        <Check className="h-3.5 w-3.5 text-emerald-400" />
-                        <span className="text-emerald-400 font-bold">Copied!</span>
-                      </>
+                      <><Check className="h-3.5 w-3.5 text-emerald-400" /><span className="text-emerald-400 font-bold">Copied!</span></>
                     ) : (
-                      <>
-                        <Copy className="h-3.5 w-3.5 text-amber-400" />
-                        <span>Copy Address</span>
-                      </>
+                      <><Copy className="h-3.5 w-3.5 text-amber-400" /><span>Copy Address</span></>
                     )}
                   </button>
 

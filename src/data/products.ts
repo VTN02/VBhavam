@@ -417,7 +417,7 @@ export const products: Product[] = [
       { label: "Sweetener", value: "Pure Jaggery & Cardamom" },
     ],
     warranty: "Traditional Recipe • 100% Pure Veg",
-    image: "/images/dishes/halva.jpg",
+    image: "/images/dishes/sweet_boally.jpg",
   },
   {
     id: "item-018-vegetable-rotti",
@@ -439,7 +439,7 @@ export const products: Product[] = [
       { label: "Shape", value: "Folded Griddle Triangle" },
     ],
     warranty: "Freshly Toasted Daily • 100% Pure Veg",
-    image: "/images/dishes/chapati.jpg",
+    image: "/images/dishes/vegetable_rotti.jpg",
   },
   {
     id: "item-019-banana-bhaji",
@@ -461,7 +461,7 @@ export const products: Product[] = [
       { label: "Pricing", value: "Rs.40" },
     ],
     warranty: "Hot & Crispy • 100% Pure Veg",
-    image: "/images/dishes/pakora.jpg",
+    image: "/images/dishes/chilli_bajji.jpg",
   },
   {
     id: "item-020-chilli-bhaji",
@@ -483,7 +483,7 @@ export const products: Product[] = [
       { label: "Spice Level", value: "Medium-Hot" },
     ],
     warranty: "Hot & Crispy • 100% Pure Veg",
-    image: "/images/dishes/pakora.jpg",
+    image: "/images/dishes/chilli_bajji.jpg",
   },
   {
     id: "item-021-special-curries",
@@ -527,7 +527,7 @@ export const products: Product[] = [
       { label: "Nutrient", value: "High Protein & Fiber" },
     ],
     warranty: "Traditional Grain • 100% Pure Veg",
-    image: "/images/dishes/dal.jpg",
+    image: "/images/dishes/kadalai_sundal.jpg",
   },
   {
     id: "item-073-kadalai",
@@ -549,7 +549,7 @@ export const products: Product[] = [
       { label: "Pricing", value: "Rs.80" },
     ],
     warranty: "Nutritious & Fresh • 100% Pure Veg",
-    image: "/images/dishes/vada_food.jpg",
+    image: "/images/dishes/kadalai_sundal.jpg",
   },
   {
     id: "item-074-payaru",
@@ -571,7 +571,7 @@ export const products: Product[] = [
       { label: "Pricing", value: "Rs.50" },
     ],
     warranty: "Healthy Pulses • 100% Pure Veg",
-    image: "/images/dishes/dal.jpg",
+    image: "/images/dishes/kadalai_sundal.jpg",
   },
 
   // ---------------- 2. Lunch (7 items, 11:00 AM – 3:00 PM) ----------------
@@ -596,7 +596,7 @@ export const products: Product[] = [
       { label: "Serving Type", value: "Dine-in or Takeaway" },
     ],
     warranty: "Prepared Fresh for Midday • 100% Pure Veg",
-    image: "/assets/lunch-feast.jpg",
+    image: "/images/dishes/rice_curry_regular.jpg",
   },
   {
     id: "item-031-budget-lunch",
@@ -619,7 +619,7 @@ export const products: Product[] = [
       { label: "Service", value: "Take Away Only" },
     ],
     warranty: "Quick Packed • 100% Pure Veg",
-    image: "/assets/lunch-feast.jpg",
+    image: "/images/dishes/budget_lunch.jpg",
   },
   {
     id: "item-032-biryani",
@@ -664,7 +664,7 @@ export const products: Product[] = [
       { label: "Serving Style", value: "Banana Leaf Grand Platter" },
     ],
     warranty: "Signature Jaffna Feast • 100% Pure Veg",
-    image: "/assets/lunch-feast.jpg",
+    image: "/images/dishes/jaffna_special_lunch.jpg",
   },
   {
     id: "item-034-varaku-rice",
@@ -1278,7 +1278,7 @@ export const products: Product[] = [
       { label: "Specialty", value: "Jaffna Heritage Icon" },
     ],
     warranty: "Authentic Jaffna Heritage • 100% Pure Veg",
-    image: "/assets/sweets-palakaaram.jpg",
+    image: "/images/dishes/odyal_kool.jpg",
   },
 
   // ---------------- 6. Indian Sweets (7 items) ----------------

@@ -4,87 +4,23 @@ import {
   Menu,
   X,
   Search,
-  ChevronDown,
   Utensils,
-  Coffee,
-  Flame,
-  ShieldCheck,
-  Sparkles,
-  Heart,
-  CupSoda,
-  Layers,
-  ArrowRight,
-  Clock,
-  MapPin,
   Navigation,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { site } from "@/config/site";
-import { categories, products, formatPrice, type Category, type Product } from "@/data/products";
+import { products } from "@/data/products";
 import { SearchModal } from "@/components/SearchModal";
 import { setSearchActive } from "@/utils/searchEvents";
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/categories", label: "Categories", hasDropdown: true },
-  { to: "/products", label: "Digital Menu (83 Items)" },
+  { to: "/categories", label: "Categories" },
+  { to: "/products", label: "Our Menu" },
   { to: "/about", label: "About Us" },
-  { to: "/branches", label: "Visit & Directions" },
+  { to: "/contact", label: "Contact" },
 ] as const;
-
-const categoryDetails: Record<
-  Category,
-  {
-    icon: typeof Utensils;
-    desc: string;
-    badgeColor: string;
-    iconColor: string;
-  }
-> = {
-  "Breakfast & All Time": {
-    icon: Coffee,
-    desc: "String hoppers, idly, dosai, vadai & poori (6:00 AM – 10:00 PM)",
-    badgeColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-    iconColor: "text-amber-400 bg-amber-500/15",
-  },
-  "Lunch": {
-    icon: Utensils,
-    desc: "Vegetarian Rice & Curry, Jaffna Special & Budget Lunch",
-    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    iconColor: "text-emerald-400 bg-emerald-500/15",
-  },
-  "Evening Special": {
-    icon: Flame,
-    desc: "Masala dosai, ghee dosai, pittu kottu & rotti kottu (4:00 PM – 10:00 PM)",
-    badgeColor: "bg-orange-500/10 text-orange-400 border-orange-500/20",
-    iconColor: "text-orange-400 bg-orange-500/15",
-  },
-  "Diabetes Special": {
-    icon: ShieldCheck,
-    desc: "Traditional grain Kurakkan & Attama preparations",
-    badgeColor: "bg-teal-500/10 text-teal-400 border-teal-500/20",
-    iconColor: "text-teal-400 bg-teal-500/15",
-  },
-  "Jaffna Palakaaram": {
-    icon: Sparkles,
-    desc: "Kolukattai, Mothakam, Muruku & authentic Odyal Kool",
-    badgeColor: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-    iconColor: "text-yellow-400 bg-yellow-500/15",
-  },
-  "Indian Sweets": {
-    icon: Heart,
-    desc: "Pure ghee Mysore Pak, Jaangiri, Rava Laddoo & Kesari",
-    badgeColor: "bg-rose-500/10 text-rose-400 border-rose-500/20",
-    iconColor: "text-rose-400 bg-rose-500/15",
-  },
-  "Beverages": {
-    icon: CupSoda,
-    desc: "Ceylon tea, ginger tea, coffee, cold drinks & mineral water",
-    badgeColor: "bg-sky-500/10 text-sky-400 border-sky-500/20",
-    iconColor: "text-sky-400 bg-sky-500/15",
-  },
-};
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -93,9 +29,6 @@ export function Navbar() {
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [searchHovered, setSearchHovered] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
-  const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
-  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -123,7 +56,6 @@ export function Navbar() {
     setSearchOpen(false);
     setSearchExpanded(false);
     setSearchHovered(false);
-    setCategoryDropdownOpen(false);
   }, [pathname]);
 
   const handleSearchMouseEnter = () => {
@@ -175,17 +107,6 @@ export function Navbar() {
     }
   };
 
-  const handleCategoryMouseEnter = () => {
-    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-    setCategoryDropdownOpen(true);
-  };
-
-  const handleCategoryMouseLeave = () => {
-    dropdownTimeoutRef.current = setTimeout(() => {
-      setCategoryDropdownOpen(false);
-    }, 200);
-  };
-
   return (
     <header
       className={cn(
@@ -220,190 +141,28 @@ export function Navbar() {
 
         {/* Desktop Links */}
         <ul className="mx-auto hidden items-center gap-1 lg:flex">
-          {links.map((link) => {
-            if (link.to === "/categories") {
-              return (
-                <li
-                  key={link.to}
-                  className="relative"
-                  onMouseEnter={handleCategoryMouseEnter}
-                  onMouseLeave={handleCategoryMouseLeave}
-                >
-                  <Link
-                    to="/categories"
-                    activeOptions={{ exact: false }}
-                    className="group relative inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
-                    activeProps={{ className: "text-amber-400 font-bold" }}
-                    aria-haspopup="true"
-                    aria-expanded={categoryDropdownOpen}
-                  >
-                    {({ isActive }) => (
-                      <>
-                        <span>{link.label}</span>
-                        <ChevronDown
-                          className={cn(
-                            "h-3.5 w-3.5 text-slate-400 transition-transform duration-200 group-hover:text-white",
-                            categoryDropdownOpen && "rotate-180 text-amber-400"
-                          )}
-                          aria-hidden="true"
-                        />
-                        <span
-                          className={cn(
-                            "absolute inset-x-3 -bottom-0.5 h-0.5 origin-left rounded-full bg-amber-400 transition-transform duration-300",
-                            isActive || categoryDropdownOpen ? "scale-x-100" : "scale-x-0"
-                          )}
-                        />
-                      </>
-                    )}
-                  </Link>
-
-                  {/* Mega-Menu Dropdown */}
-                  <AnimatePresence>
-                    {categoryDropdownOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.97 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute left-1/2 -translate-x-1/2 top-full pt-3 w-[720px] max-w-[96vw] z-50 pointer-events-auto"
-                      >
-                        <div className="absolute top-1 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 rounded-sm bg-[#121622] border-l border-t border-amber-500/20 z-10" />
-
-                        <div className="relative overflow-hidden rounded-2xl border border-amber-500/25 bg-[#121622] shadow-[0_24px_60px_rgba(0,0,0,0.85)] backdrop-blur-3xl ring-1 ring-white/[0.06]">
-                          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/70 to-transparent" />
-
-                          <div className="flex">
-                            {/* Left Panel */}
-                            <div className="relative flex w-52 shrink-0 flex-col justify-between gap-6 border-r border-white/[0.07] bg-[#0d1018] p-6">
-                              <div className="relative space-y-1">
-                                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-amber-400">
-                                  Pure Vegetarian
-                                </p>
-                                <h3 className="text-lg font-extrabold leading-tight text-white">
-                                  Food Menu
-                                </h3>
-                                <p className="text-[11px] leading-relaxed text-slate-400">
-                                  Fresh breakfast, midday meals, evening tiffins &amp; Jaffna heritage sweets.
-                                </p>
-                              </div>
-
-                              <div className="relative flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5">
-                                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-amber-400">
-                                  <Layers className="h-3.5 w-3.5" />
-                                </span>
-                                <div>
-                                  <p className="text-sm font-extrabold text-white">83 Items</p>
-                                  <p className="text-[10px] text-slate-400">100% Pure Veg</p>
-                                </div>
-                              </div>
-
-                              <Link
-                                to="/products"
-                                onClick={() => setCategoryDropdownOpen(false)}
-                                className="relative group inline-flex items-center justify-center gap-1.5 rounded-xl bg-amber-500 px-4 py-2.5 text-xs font-bold text-black shadow-lg shadow-amber-500/25 transition-all duration-200 hover:bg-amber-400 active:scale-[0.98]"
-                              >
-                                <span>Browse Full Menu</span>
-                                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-                              </Link>
-                            </div>
-
-                            {/* Right Panel - Category Grid */}
-                            <div className="flex-1 p-4">
-                              <div className="grid grid-cols-2 gap-1.5">
-                                {categories.map((cat) => {
-                                  const meta = categoryDetails[cat];
-                                  const catProducts = products.filter((p) => p.category === cat);
-                                  const IconComponent = meta?.icon ?? Utensils;
-                                  const iconTextColor = meta?.iconColor.split(" ")[0] ?? "text-amber-400";
-                                  const iconBgColor = meta?.iconColor.split(" ").slice(1).join(" ") ?? "bg-amber-500/15";
-
-                                  return (
-                                    <Link
-                                      key={cat}
-                                      to="/products"
-                                      search={{ category: cat }}
-                                      onClick={() => setCategoryDropdownOpen(false)}
-                                      className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-transparent px-3 py-2.5 transition-all duration-200 hover:border-white/[0.10] hover:bg-white/[0.05] active:scale-[0.98]"
-                                    >
-                                      <div
-                                        className={cn(
-                                          "relative grid h-9 w-9 shrink-0 place-items-center rounded-xl border transition-transform duration-200 group-hover:scale-110",
-                                          iconBgColor,
-                                          meta?.badgeColor.split(" ").find((c) => c.startsWith("border")) ?? "border-white/10"
-                                        )}
-                                      >
-                                        <IconComponent className={cn("h-4 w-4", iconTextColor)} aria-hidden="true" />
-                                      </div>
-
-                                      <div className="relative min-w-0 flex-1">
-                                        <div className="flex items-center justify-between gap-1">
-                                          <p className="truncate text-[13px] font-semibold text-slate-200 group-hover:text-white transition-colors duration-200">
-                                            {cat}
-                                          </p>
-                                          <span
-                                            className={cn(
-                                              "shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums border",
-                                              meta?.badgeColor ?? "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                                            )}
-                                          >
-                                            {catProducts.length}
-                                          </span>
-                                        </div>
-                                        <p className="mt-0.5 line-clamp-1 text-[11px] text-slate-400">
-                                          {meta?.desc}
-                                        </p>
-                                      </div>
-                                    </Link>
-                                  );
-                                })}
-                              </div>
-
-                              <div className="mt-3 flex items-center justify-between border-t border-white/[0.06] pt-3">
-                                <p className="text-[11px] text-slate-400">
-                                  Showing all 7 food categories
-                                </p>
-                                <Link
-                                  to="/products"
-                                  onClick={() => setCategoryDropdownOpen(false)}
-                                  className="group inline-flex items-center gap-1 text-[11px] font-semibold text-amber-400 transition-colors hover:text-amber-300"
-                                >
-                                  <span>View digital menu (83 items)</span>
-                                  <ArrowRight className="h-3 w-3 transition-transform duration-150 group-hover:translate-x-0.5" />
-                                </Link>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </li>
-              );
-            }
-
-            return (
-              <li key={link.to}>
-                <Link
-                  to={link.to}
-                  activeOptions={{ exact: link.to === "/" }}
-                  className="relative rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
-                  activeProps={{ className: "text-amber-400 font-bold" }}
-                >
-                  {({ isActive }) => (
-                    <>
-                      {link.label}
-                      <span
-                        className={cn(
-                          "absolute inset-x-3 -bottom-0.5 h-0.5 origin-left rounded-full bg-amber-400 transition-transform duration-300",
-                          isActive ? "scale-x-100" : "scale-x-0"
-                        )}
-                      />
-                    </>
-                  )}
-                </Link>
-              </li>
-            );
-          })}
+          {links.map((link) => (
+            <li key={link.to}>
+              <Link
+                to={link.to}
+                activeOptions={{ exact: link.to === "/" }}
+                className="relative rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
+                activeProps={{ className: "text-amber-400 font-bold" }}
+              >
+                {({ isActive }) => (
+                  <>
+                    {link.label}
+                    <span
+                      className={cn(
+                        "absolute inset-x-3 -bottom-0.5 h-0.5 origin-left rounded-full bg-amber-400 transition-transform duration-300",
+                        isActive ? "scale-x-100" : "scale-x-0"
+                      )}
+                    />
+                  </>
+                )}
+              </Link>
+            </li>
+          ))}
         </ul>
 
         {/* Right side controls */}
@@ -424,9 +183,9 @@ export function Navbar() {
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="Open search dialog"
-            className="grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] hover:text-white transition-colors"
+            className="grid h-10 w-10 place-items-center text-slate-300 hover:text-white transition-colors"
           >
-            <Search className="h-4 w-4 text-amber-400" />
+            <Search className="h-5 w-5 text-amber-400 hover:text-amber-300 transition-colors" />
           </button>
 
           {/* Mobile menu trigger */}
@@ -436,7 +195,7 @@ export function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] hover:text-white lg:hidden"
+            className="grid h-10 w-10 place-items-center text-slate-300 hover:text-white lg:hidden transition-colors"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>

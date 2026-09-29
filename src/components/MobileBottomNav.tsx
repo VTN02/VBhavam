@@ -17,7 +17,7 @@ const navItems: NavItem[] = [
   { to: "/", label: "Home", icon: Home },
   { to: "/products", label: "Food Menu", icon: Utensils },
   { to: "/categories", label: "Categories", icon: Layers },
-  { to: "/branches", label: "Visit Us", icon: MapPin },
+  { to: "/contact", label: "Contact", icon: MapPin },
   {
     href: whatsappLink(waMessages.general()),
     label: "WhatsApp",
