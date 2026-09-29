@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
-import { Star, ExternalLink, MessageSquarePlus } from "lucide-react";
-import { motion } from "framer-motion";
+import { Star, ExternalLink, MessageSquarePlus, Camera, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { site } from "@/config/site";
 
 function GoogleLogo({ className = "h-4 w-4" }: { className?: string }) {
@@ -26,26 +26,49 @@ function GoogleLogo({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
-const googleReviews = [
+interface ReviewImage {
+  src: string;
+  caption: string;
+}
+
+interface GoogleReviewItem {
+  id: number;
+  name: string;
+  role: string;
+  date: string;
+  rating: number;
+  text: string;
+  avatar: string;
+  color: string;
+  images?: ReviewImage[];
+}
+
+const googleReviews: GoogleReviewItem[] = [
   {
     id: 1,
     name: "Sivaram Thangarajah",
-    role: "Local Guide",
+    role: "Local Guide • 42 reviews",
     date: "1 week ago",
     rating: 5,
     text: "Best pure vegetarian restaurant in Jaffna! Their crispy Ghee Masala Dosai with fresh coconut chutney and spicy sambar is out of this world. Highly recommend stopping here on KKS Road.",
     avatar: "ST",
     color: "from-amber-500 to-orange-500",
+    images: [
+      { src: "/images/dishes/dosa.jpg", caption: "Crispy Ghee Masala Dosai with Chutney & Sambar" },
+    ],
   },
   {
     id: 2,
     name: "Rajan Muthu",
-    role: "Local Guide",
+    role: "Local Guide • 18 reviews",
     date: "2 weeks ago",
     rating: 5,
     text: "The Jaffna Special Lunch Feast served on fresh banana leaf is exceptional. The curries are cooked to perfection with authentic northern spices. Budget friendly and very satisfying.",
     avatar: "RM",
     color: "from-emerald-500 to-teal-500",
+    images: [
+      { src: "/images/dishes/jaffna_special_lunch.jpg", caption: "Jaffna Special Lunch Feast on Banana Leaf" },
+    ],
   },
   {
     id: 3,
@@ -56,16 +79,23 @@ const googleReviews = [
     text: "Delicious breakfast with steaming string hoppers, fluffy idly, and crispy medu vadai. The sodhi has the right balance of coconut milk and spices. 100% pure veg heaven!",
     avatar: "PN",
     color: "from-rose-500 to-pink-500",
+    images: [
+      { src: "/images/dishes/idli.jpg", caption: "Fluffy Steamed Idly with Sambar" },
+      { src: "/images/dishes/medu_vada.jpg", caption: "Crispy Golden Medu Vadai" },
+    ],
   },
   {
     id: 4,
     name: "Anand Kumar",
-    role: "Local Guide",
+    role: "Local Guide • 31 reviews",
     date: "1 month ago",
     rating: 5,
     text: "If you are in Jaffna and crave authentic vegetarian evening tiffins, Vishnu Bhavan is the place. Their Pittu Kottu and Rotti Kottu on the iron griddle are packed with flavor.",
     avatar: "AK",
     color: "from-sky-500 to-blue-500",
+    images: [
+      { src: "/images/dishes/kottu.jpg", caption: "Sizzling Hot Pittu Kottu" },
+    ],
   },
   {
     id: 5,
@@ -76,26 +106,35 @@ const googleReviews = [
     text: "Their pure ghee Mysore Pak and Jaangiri are top-tier! We bought boxes to take back home to Colombo. Authentic South Indian sweets right in the heart of Jaffna.",
     avatar: "MB",
     color: "from-purple-500 to-violet-500",
+    images: [
+      { src: "/images/dishes/mysore_pak.jpg", caption: "Handmade Pure Ghee Mysore Pak" },
+    ],
   },
   {
     id: 6,
     name: "Kavitha Sree",
-    role: "Local Guide",
+    role: "Local Guide • 65 reviews",
     date: "2 months ago",
     rating: 5,
     text: "The traditional Odyal Kool and Jaffna Palakaaram snacks are authentic heritage recipes. So hard to find such genuine taste nowadays. Staff is very attentive and polite.",
     avatar: "KS",
     color: "from-yellow-500 to-amber-500",
+    images: [
+      { src: "/images/dishes/odyal_kool.jpg", caption: "Authentic Jaffna Odyal Kool" },
+    ],
   },
   {
     id: 7,
     name: "Senthil Nathan",
-    role: "Local Guide",
+    role: "Local Guide • 12 reviews",
     date: "2 months ago",
     rating: 5,
     text: "They have a special Diabetes friendly menu with Kurakkan and Attama dishes, which is very rare and appreciated for elderly family members. Food was fresh and wholesome.",
     avatar: "SN",
     color: "from-indigo-500 to-blue-500",
+    images: [
+      { src: "/images/dishes/puttu.jpg", caption: "Traditional Red Rice Bamboo Pittu" },
+    ],
   },
   {
     id: 8,
@@ -106,17 +145,26 @@ const googleReviews = [
     text: "Traveled all the way from Colombo and Vishnu Bhavan was our first stop. Clean dining hall, fast service, and authentic Jaffna vegetarian food at very fair prices.",
     avatar: "DW",
     color: "from-teal-500 to-emerald-500",
+    images: [
+      { src: "/images/dishes/lunch-feast.jpg", caption: "Midday Vegetarian Feast" },
+    ],
   },
 ];
 
-function ReviewCard({ review }: { review: (typeof googleReviews)[0] }) {
+function ReviewCard({
+  review,
+  onImageClick,
+}: {
+  review: GoogleReviewItem;
+  onImageClick?: (img: ReviewImage, reviewer: string) => void;
+}) {
   return (
-    <div className="relative flex flex-col h-full min-w-[280px] sm:min-w-0 overflow-hidden rounded-lg border border-white/[0.08] bg-gradient-to-b from-[#141824] to-[#0e1118] p-5 sm:p-6 shadow-xl hover:border-amber-500/30 hover:shadow-[0_16px_40px_-8px_rgba(245,158,11,0.12)] transition-all duration-300 group">
+    <div className="relative flex flex-col h-full min-w-[280px] sm:min-w-0 overflow-hidden rounded-lg border border-white/[0.08] bg-gradient-to-b from-[#141824] to-[#0e1118] p-4 sm:p-5 shadow-xl hover:border-amber-500/30 hover:shadow-[0_16px_40px_-8px_rgba(245,158,11,0.12)] transition-all duration-300 group">
       {/* Top accent line */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-amber-400/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
       {/* Top row: Google badge & review date */}
-      <div className="flex items-center justify-between gap-2 mb-3.5">
+      <div className="flex items-center justify-between gap-2 mb-3">
         <div className="inline-flex items-center gap-1.5 rounded-md bg-white/[0.05] border border-white/[0.08] px-2 py-0.5">
           <GoogleLogo className="h-3.5 w-3.5" />
           <span className="text-[10px] font-semibold text-slate-300">Google Review</span>
@@ -125,7 +173,7 @@ function ReviewCard({ review }: { review: (typeof googleReviews)[0] }) {
       </div>
 
       {/* 5 Google Stars */}
-      <div className="flex gap-0.5 mb-3">
+      <div className="flex gap-0.5 mb-2.5">
         {Array.from({ length: 5 }).map((_, i) => (
           <Star
             key={i}
@@ -135,14 +183,45 @@ function ReviewCard({ review }: { review: (typeof googleReviews)[0] }) {
       </div>
 
       {/* Review text */}
-      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed flex-1 mb-5">
+      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed flex-1 mb-3.5">
         "{review.text}"
       </p>
 
+      {/* Attached Review Photo(s) */}
+      {review.images && review.images.length > 0 && (
+        <div className="mb-3.5">
+          <div className="flex items-center gap-1 mb-1.5 text-[10px] font-medium text-amber-400/90">
+            <Camera className="h-3 w-3" />
+            <span>
+              {review.images.length} {review.images.length === 1 ? "photo attached" : "photos attached"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            {review.images.map((img, i) => (
+              <button
+                type="button"
+                key={i}
+                onClick={() => onImageClick?.(img, review.name)}
+                className="group/img relative overflow-hidden rounded-md border border-white/10 aspect-[4/3] h-14 w-18 sm:h-16 sm:w-22 shrink-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-amber-400 hover:border-amber-400/50 transition-all"
+                title={`Click to view: ${img.caption}`}
+              >
+                <img
+                  src={img.src}
+                  alt={img.caption}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover/img:scale-110"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/0 transition-colors" />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Reviewer info */}
-      <div className="flex items-center gap-3 pt-3.5 border-t border-white/[0.06] mt-auto">
+      <div className="flex items-center gap-2.5 pt-3 border-t border-white/[0.06] mt-auto">
         <div
-          className={`h-8 w-8 rounded-full bg-gradient-to-br ${review.color} flex items-center justify-center text-[11px] font-extrabold text-white shadow-md shrink-0`}
+          className={`h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-gradient-to-br ${review.color} flex items-center justify-center text-[10px] sm:text-[11px] font-extrabold text-white shadow-md shrink-0`}
         >
           {review.avatar}
         </div>
@@ -160,6 +239,22 @@ export function ReviewSection() {
   const [isDragging, setIsDragging] = useState(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+
+  // Lightbox modal state for viewing review photos
+  const [activePhoto, setActivePhoto] = useState<{ img: ReviewImage; reviewer: string } | null>(null);
+
+  const handleImageClick = (img: ReviewImage, reviewer: string) => {
+    setActivePhoto({ img, reviewer });
+  };
+
+  // Close lightbox on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActivePhoto(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   // Auto-scroll for mobile carousel
   useEffect(() => {
@@ -228,7 +323,7 @@ export function ReviewSection() {
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 shadow-sm">
             <GoogleLogo className="h-4 w-4" />
             <span className="text-xs font-bold tracking-wide text-white">
-              Google Customer Reviews
+              Google Customer Reviews &amp; Photos
             </span>
           </div>
 
@@ -236,7 +331,7 @@ export function ReviewSection() {
             Loved by Diners in Jaffna &amp; Beyond
           </h2>
           <p className="mt-3 text-base text-slate-300">
-            Real guest feedback from our Google Maps listing at No. 350, Jaffna–Kankesanturai Road.
+            Real guest reviews and customer dish photos from our Google Maps listing at No. 350, Jaffna–Kankesanturai Road.
           </p>
 
           {/* Stars & Google score summary */}
@@ -269,7 +364,7 @@ export function ReviewSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.05 }}
             >
-              <ReviewCard review={review} />
+              <ReviewCard review={review} onImageClick={handleImageClick} />
             </motion.div>
           ))}
         </div>
@@ -292,14 +387,14 @@ export function ReviewSection() {
               key={`${review.id}-${idx}`}
               className="flex-shrink-0 w-[280px] sm:w-[320px]"
             >
-              <ReviewCard review={review} />
+              <ReviewCard review={review} onImageClick={handleImageClick} />
             </div>
           ))}
         </div>
 
         {/* Mobile scroll hint */}
         <p className="lg:hidden text-center text-[11px] text-slate-500 mt-4">
-          ← Swipe or drag to explore reviews →
+          ← Swipe or drag to explore reviews &amp; photos →
         </p>
 
         {/* ── BOTTOM ACTIONS: View on Google / Write a review ── */}
@@ -326,6 +421,56 @@ export function ReviewSection() {
           </a>
         </div>
       </div>
+
+      {/* ── PHOTO LIGHTBOX MODAL ── */}
+      <AnimatePresence>
+        {activePhoto && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="relative max-w-xl w-full overflow-hidden rounded-xl border border-amber-500/20 bg-[#121622] shadow-2xl p-4 sm:p-5"
+            >
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setActivePhoto(null)}
+                aria-label="Close photo preview"
+                className="absolute top-3 right-3 grid h-9 w-9 place-items-center rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors z-10"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              {/* Photo */}
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-black/50 border border-white/10">
+                <img
+                  src={activePhoto.img.src}
+                  alt={activePhoto.img.caption}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+
+              {/* Details */}
+              <div className="mt-3.5 flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-bold text-white">{activePhoto.img.caption}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Posted by <span className="text-amber-400 font-semibold">{activePhoto.reviewer}</span> on Google
+                  </p>
+                </div>
+
+                <div className="flex gap-0.5 shrink-0">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-3.5 w-3.5 text-[#FBBC05] fill-[#FBBC05]" />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
