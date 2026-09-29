@@ -105,7 +105,7 @@ function CategoriesPage() {
         />
 
         {/* Categories Quick Pills */}
-        <div className="mt-8 flex flex-wrap justify-center gap-2">
+        <div className="mt-5 sm:mt-8 flex flex-wrap justify-center gap-1.5 sm:gap-2">
           {categories.map((cat) => {
             const catProducts = products.filter((p) => p.category === cat);
             return (
@@ -113,10 +113,10 @@ function CategoriesPage() {
                 key={cat}
                 to="/products"
                 search={{ category: cat }}
-                className="group inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-[#141722] px-3.5 py-1.5 text-xs font-semibold text-slate-300 transition-all duration-200 hover:border-amber-400 hover:text-white"
+                className="group inline-flex items-center gap-1 sm:gap-2 rounded-full border border-amber-500/20 bg-[#141722] px-2.5 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs font-semibold text-slate-300 transition-all duration-200 hover:border-amber-400 hover:text-white"
               >
                 <span>{cat}</span>
-                <span className="rounded-full bg-amber-500/15 text-amber-300 px-2 py-0.5 text-[10px] font-bold">
+                <span className="rounded-full bg-amber-500/15 text-amber-300 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold">
                   {catProducts.length}
                 </span>
               </Link>

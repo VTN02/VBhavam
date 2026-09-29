@@ -111,7 +111,7 @@ function ProductsPage() {
         </div>
 
         {/* Category Tabs */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
+        <div className="mt-5 sm:mt-8 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 px-1">
           {categories.map((cat) => {
             const isActive = selectedCategory === cat.label;
             return (
@@ -120,7 +120,7 @@ function ProductsPage() {
                 type="button"
                 whileTap={{ scale: 0.94 }}
                 onClick={() => setSelectedCategory(cat.label)}
-                className={`group relative inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition-colors duration-200 outline-none cursor-pointer ${
+                className={`group relative inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-2.5 py-1 sm:px-4 sm:py-2 text-[11px] sm:text-xs font-bold transition-colors duration-200 outline-none cursor-pointer ${
                   isActive ? "text-stone-950 font-extrabold" : "text-slate-300 hover:text-white"
                 }`}
               >
@@ -136,7 +136,7 @@ function ProductsPage() {
                 )}
                 <span className="relative z-10">{cat.label}</span>
                 <span
-                  className={`relative z-10 rounded-full px-1.5 py-0.5 text-[10px] font-extrabold transition-colors ${
+                  className={`relative z-10 rounded-full px-1.5 py-0.5 text-[9px] sm:text-[10px] font-extrabold transition-colors ${
                     isActive
                       ? "bg-black/20 text-stone-950"
                       : "bg-white/[0.08] text-slate-400 group-hover:text-amber-300"
