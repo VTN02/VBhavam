@@ -1,18 +1,14 @@
-import { useEffect, useRef, useState, useMemo } from "react";
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Menu,
   X,
-  Search,
   Utensils,
   Navigation,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { site } from "@/config/site";
-import { products } from "@/data/products";
-import { SearchModal } from "@/components/SearchModal";
-import { setSearchActive } from "@/utils/searchEvents";
 
 const links = [
   { to: "/", label: "Home" },
@@ -25,24 +21,7 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchExpanded, setSearchExpanded] = useState(false);
-  const [searchHovered, setSearchHovered] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
-  const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-
-  const isSearchActive = searchExpanded || searchHovered || searchOpen;
-
-  useEffect(() => {
-    setSearchActive(isSearchActive);
-    return () => {
-      setSearchActive(false);
-    };
-  }, [isSearchActive]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -53,59 +32,7 @@ export function Navbar() {
 
   useEffect(() => {
     setOpen(false);
-    setSearchOpen(false);
-    setSearchExpanded(false);
-    setSearchHovered(false);
   }, [pathname]);
-
-  const handleSearchMouseEnter = () => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    setSearchHovered(true);
-  };
-
-  const handleSearchMouseLeave = () => {
-    if (!searchExpanded && !searchQuery.trim()) {
-      hoverTimeoutRef.current = setTimeout(() => {
-        setSearchHovered(false);
-      }, 250);
-    }
-  };
-
-  const handleOpenSearch = () => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    setSearchExpanded(true);
-    setOpen(false);
-    setTimeout(() => searchInputRef.current?.focus(), 80);
-  };
-
-  const handleCloseSearch = () => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    setSearchExpanded(false);
-    setSearchHovered(false);
-    setSearchQuery("");
-  };
-
-  const searchResults = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return [];
-
-    return products
-      .filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.itemCode.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q)
-      )
-      .slice(0, 6);
-  }, [searchQuery]);
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate({ to: "/products", search: { q: searchQuery.trim() } });
-      handleCloseSearch();
-    }
-  };
 
   return (
     <header
@@ -178,16 +105,6 @@ export function Navbar() {
             <span>Find Us (KKS Rd)</span>
           </a>
 
-          {/* Search Trigger */}
-          <button
-            type="button"
-            onClick={() => setSearchOpen(true)}
-            aria-label="Open search dialog"
-            className="grid h-10 w-10 place-items-center text-slate-300 hover:text-white transition-colors"
-          >
-            <Search className="h-5 w-5 text-amber-400 hover:text-amber-300 transition-colors" />
-          </button>
-
           {/* Mobile menu trigger */}
           <button
             type="button"
@@ -201,9 +118,6 @@ export function Navbar() {
           </button>
         </div>
       </nav>
-
-      {/* Spotlight Command Search Dialog */}
-      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* Mobile Drawer Menu */}
       <AnimatePresence>
